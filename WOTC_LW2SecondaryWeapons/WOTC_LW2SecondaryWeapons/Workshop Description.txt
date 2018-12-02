@@ -1,0 +1,185 @@
+War of the Chosen, Item, Weapon
+
+[WOTC] LW2 Secondary Weapons
+
+[h1]Long War 2 Secondaries for WOTC[/h1]
+
+Brings Long War 2's new secondary weapons out for use with custom soldier classes in WOTC! Includes weapons, upgrade schematics, and all associated abilities as of LW2 version 1.5.
+
+
+[h1]Dependencies[/h1]
+
+Requires the [url=http://steamcommunity.com/sharedfiles/filedetails/?id=1134256495] [b]WOTC Community Highlander[/b] [/url]:
+[i][b]Why?:[/b] The Highlander adds support for adding new sockets to attach the weapons to the soldier. Without it, the weapon meshes will not show up (animations will play with no visible weapon).[/i]
+
+
+[h1]Features[/h1]
+
+More than just a straight port of assets and code, this version includes some enhancements and additional features not present in Long War 2:
+[list]
+[*] [b]3 Tiers for All Items[/b] - The Sawed-Off Shotgun and the Combat Knife only had one upgrade which came rather late and had roughly Tier 2.5 stats. The stats and tech requirements for the first upgrade have been reduced and a Tier 3 upgrade has been added for smoother progression. The Tier 3 versions share the same visuals as the Tier 2, unfortunately.
+
+[*] [b]Added Ability Tags[/b] - Ability Tags have been setup so that the actual values from the config files will be pulled in for most localization text. The Localization text has been cleaned up and altered to support the Ability Tags. (I've only done this in English - If you would like to submit a translation, let me know in the Discussion section)
+
+[*] [b]Support for Alternate Configurations[/b] - There are a lot of mods out there that change the way the game plays: I've tried to build this to work with as many setups as possible. By default, the weapons are setup to function like base-game weapon upgrades that are infinite and use Upgrade Schematics; however, the config framework and a boolean toggle in the config files are there to switch to upgrading them as finite items like LW2. Cost configurations have been expanded to include more resource types that can be configured as desired and all resource costs will be ignored in the UI if set to 0. Additionally, conditions have been added to all of the abilities where it's appropriate to disable their display and effects when a valid weapon type is not equipped, allowing better support for multi-purpose classes that have access to multiple weapons. The list of valid weapon types for each set of abilities is expandable to support any additional weapon categories that the modding community may release in the future.
+
+NOTE: The bFiniteItems variable should not be changed mid-campaign... things will likely break.
+
+[*] [b]Some Small Bug-Fixes[/b] - I fixed a few issues and inconsistencies that I found while testing the abilities. If you find any more, let me know and I'll try to sort them out.
+[/list]
+
+
+[h1]How to Use[/h1]
+
+This mod now adds basic support for the 4 base game classes to use these secondary weapons. Each class will have the choice between their normal secondary weapon, one long-range secondary (arcthrower for specialists, gauntlet for grenadiers, and holotargeter for rangers/sharpshooters) and one short range secondary (combat knife for rangers, sawed off shotguns for everyone else). The base classes will only have access to the base abilities - custom classes that are assigned the weapons and abilities will have to be used to get access to the more specialized abilities. If you want to try your hand at creating your own custom classes from existing assets, i recommend checking out [url=http://steamcommunity.com/sharedfiles/filedetails/?id=1128707437] [b]Richard's WOTC Create Your Own Class Template[/b] [/url].
+
+NOTE: In order to make integration with the base game classes possible, all of the abilities used by their normal secondary weapons had to have weapon restrictions added. The abilities and the weapons they are restricted to can be edited in XComLW2SecondariesWOTC.ini - this should only be necessary if additional weapon types/categories are released in future mods that need to work with these abilities. IF this happens, let me know and I'll add them to the default list for everyone.
+
+The names of the weapons and abilities are identical to what they were in Long War 2, but for those who may not be familier, below are the names to reference:
+
+[table]
+[tr]	-
+	[th]Arc Thrower:[/th]
+	[th]Combat Knife:[/th]
+	[th]Holo-Targeter:[/th]
+	[th]Sawed-Off Shotgun:[/th]
+	[th]Gauntlet:[/th]
+[/tr]
+[tr]
+	[th]Weapon Type:[/th]
+	[td]"arcthrower"[/td]
+	[td]"combatknife"[/td]
+	[td]"holotargeter"[/td]
+	[td]"sawedoffshotgun"[/td]
+	[td]"lw_gauntlet"[/td]
+[/tr]
+[tr]
+	[th]Abilities:[/th]
+	[td]
+	"ArcthrowerStun"
+	"EMPulser"
+	"Electroshock"
+	"StunGunner"
+	"ChainLightning"
+	[/td]
+	[td]
+	"KnifeFighter"
+	"Combatives"
+	[/td]
+	[td]
+	"Holotarget"
+	"Rapidtargeting"
+	"Multitargeting"
+	"HDHolo"
+	"IndependentTracking"
+	"VitalPointTargeting"
+	[/td]
+	[td]
+	"PointBlank"
+	"BothBarrels"
+	"PumpAction"
+	[/td]
+	[td]
+	"HeavyArmaments"
+	"LWRocketLauncher"
+	"LWBlasterLauncher"
+	"ConcussionRocket"
+	"BunkerBuster"
+	"ShockAndAwe"
+	"FireInTheHole"
+	"JavelinRockets"
+	"LWFlamethrower"
+	"Roust"
+	"Firestorm"
+	"Quickburn"
+	"Burnout"
+	"FireAndSteel"
+	"Incinerator"
+	"Phosphorus"
+	"NapalmX"
+	"HighPressure"
+	[/td]
+[/tr]
+[/table]
+[list]
+[*]By default, the Combat Knife abilities can also work with swords
+[/list]
+
+
+[h1]Thanks and Credits[/h1]
+
+All credit for visuals and original abilities goes to Pavonis Interactive and the LW2 team. See their mod page [url=http://steamcommunity.com/sharedfiles/filedetails/?id=844674609] [b]Here[/b] [/url] for detailed team credits. Huge thanks to [b]Favid[/b] for porting the toughest parts of the Gauntlet code that I had been putting off doing myself and letting me use it, to the X2CommunityHighlander team for extending what we can do with mods, and many thanks to Firaxis for a mod-friendly game.
+
+Huge thanks to [b]Erazil[/b] for the French translation. All of the dynamic ability tags in the localization text make it a real challenge/chore to translate - he was kind enough to put in a lot of work to make that happen!
+
+
+[h1]Known Issues[/h1]
+[list]
+[*] Gauntlet is attached to the wrong location on the serpent suit mesh (the cosmetic torso mesh, not the armor type). The fix for this (cosmetic only) issue from LW2 is not currently working. Using a different cosmetic torso will let you use the Serpent Suit without the visual issue.
+[*] Visual issues with some Gauntlet abilities - sometimes rocket projectiles dont show up, Firestorm's shoot animation isn't working correctly, etc.
+[/list]
+
+
+[h1]Version History[/h1] (See Change Notes for full history)
+[list]
+1.4.2:[list]
+[*] Updated targeting method for Blaster Gauntlet. (Big thanks to Favid and Mr. Nice for identifying the issue!)[/list]
+1.4.1:[list]
+[*] Updated Holotargeter conditions to correctly grab the source unit when the ability is granted through an item instead of in the soldier's ability tree.[/list]
+1.4.0:[list]
+[*] Updated Holotargeter abilities to work off the presence of effect names rather than ability names to support custom Holotargeter abilities.[/list]
+1.3.6:[list]
+[*] Fixed issues with charges being granted again in multi-part missions (like the chosen strongholds).
+[*] By default, the Arcthrower will now use a custom range table that is in-between the standard short and mid range tables. This range table can be edited or you can set to use either the standard short or mid range tables instead in the Arcthrower's section of XComGameData_WeaponData.ini.
+[*] Changed the icon for Combatives to follow the theme of other Return Fire abilities.[/list]
+1.3.5:[list]
+[*] Rocket Scatter text during targeting (ex: [b]+- 2.45 Tiles[/b]) has been restored and the default gauntlet rocket scatter has been significantly reduced from LW2 values.[/list]
+1.3.4:[list]
+[*] Attempted to improve the ability effect loading frequency for the rocket launcher abilities (they should be invisible less often now). Still not 100% consistent, but much better.
+[*] Spring cleaning! Removed some old references to the previous Napalm-X implementation that were cluttering up the place (but not causing any issues).[/list]
+1.3.3:[list]
+[*] Reworked implementation of Napalm-X to fix intermitent crashes.
+[*] Arcthrower's built-in aim modifier was changed from +5 to -10.
+[*] Fix for stuns originating from the Arcthrower being stuck when stunned units change teams (limited fix for base game bug).[/list]
+1.3.2:[list]
+[*] Fixed some nameing mismatches[/list]
+1.3.1:[list]
+[*] Fixed display text for Rocket Scatter (thanks Favid!)
+[*] Fixed incorrect mesh name for Beam Gauntlets (thanks Arkhangel!)[/list]
+1.3.0:[list]
+[*] Hooked up configurable lists so you can change which abilities are built-in to each tier and item.
+[*] Changed the way Arc Pulser works - it was too good against Mechs doing damage, reducing hack defense, AND applying full stuns. Now it only applies a 1-action stun, regardless of tech level (meaning the enemy only gets one action on their turn).
+[*] Added French translation for everything but the Gauntlet (big thanks to Erazil for doing that!)
+[*] Beta implementation of the gauntlet - all abilities should be working, but still some visual issues to work out...[/list]
+1.2.4:[list]
+[*] Arcthrower stun no longer gets removed when the shooter dies, evacs, etc.
+[*] Added some additional modabiltiy improvements (ArcthrowerStun effects now trigger the 'UnitStunnedRemoved' event when the effect is removed).[/list]
+1.2.3:[list]
+[*] Fixed broken condition for Electroshock introduced in the last update.[/list]
+1.2.2:[list]
+[*] Added a few additional modding hooks into the ArcThrower abilities/effects.
+[*] Corrected visual errors with T3 Combat Knife and set T3 Shotgun to stow on the back (rather than the hip like a pistol).
+[*] Restructured config setting for Finite Items to be a single toggle and added an additional config toggle to allow preventing previous tiers from being hidden when using Infinite Items.
+[*] Cleaned up a few loc text errors.[/list]
+1.2.1:[list]
+[*] Fix for test code granting all Holotargeter abilities left in (Oops!).[/list]
+1.2.0:[list]
+[*] Added basic visual effects for holotargeting abilities and improved target penalty localization text for the holotarget effect. Currently uses the projectile and target effects from the base-game holo-targeting effect, as well as an icon indicating extended duration from Independant Targeting (uses a small timer/stopwatch icon that hovers above the holo-targeting diamond that will be present when there is more than one turn remaining). I plan to implement similar indicator icons for increased damage and crit chance applied through HDHolo and Vital Point Targeting sometime in the future (these will require an update to the Community Highlander).
+[*] Removed the custom effectname tied to the Arcthrower's stun - the custom stun effect name didn't serve any functional purpose and was causing things relying on the base-game's IsStunned() function to fail to pickup the stun effect.
+[*] Added the Spark Bit as a valid secondary for gremlin abilities, allowing the gremlin abilities to work on sparks if they have any of the abilities assigned (such as remote hack).
+[*] Improved modularity of many abilities/effects, allowing more flexability for mod authors to make custom abilities that interface with these weapons/abilities in more varied ways than before - this generally involved replacing dependancies on specific abilities with general effect names wherever I could. For example, the holotargeter abilities previously required the 'RapidTargeting' ability present to not end the turn - this was changed to requiring a general effect named 'Holotargeter_DoNotConsumeAllActionsEffect' to be present instead, which can be given from any custom ability now.[/list]
+1.1.1:[list]
+[*] Changed the weapon restriction code to handle situations where the abilities are assigned source weapons in inventory slots other than eInvSlot_SecondaryWeapon - Should resolve issues with Primary Secondaries mod.[/list]
+1.1.0:[list]
+[*] Added basic integration for 4 base-game classes. Added weapon restrictions to all existing secondary weapon abilities to prevent bladestorming with a holotargeter, etc.
+[*] Added the base abilities to the items themselves (i.e., ArcthrowerStun to the Arcthrower item) to support the above integration and other mod support. It should no longer be necessary to put these abilities in the class ability tree for custom classes (though should not cause issues if you do or for existing classes that already have).
+[*] Added the required ini edits to prevent the secondary weapon's inherent aim bonuses (e.g., Combat Knife's +20 Aim) from showing up in the soldier's stat header - was misleading.
+[*] Added Point Blank and Both Barrels to the list of valid Headshot mechanic abilities.
+[*] Added some WOTC mechanics code for Lost and Chosen spawns to the combat abilities as they are for similar base game abilities.[/list]
+1.0.1:[list]
+[*] Updated AbilityTag to clear objects when passing through an ability tag it doesn't handle.[/list]
+1.0.0:[list]
+[*] Initial Release!.[/list]
+[/list]
+
+Please let me know what you think of the mod, if you run into bugs, or if you have balance concerns. Thanks and enjoy!

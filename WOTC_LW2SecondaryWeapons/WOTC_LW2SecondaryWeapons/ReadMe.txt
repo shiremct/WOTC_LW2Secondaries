@@ -1,0 +1,1 @@
+﻿Long War 2 Secondary Weapons for War of the Chosen. Requires the WOTC Community Highlander.
