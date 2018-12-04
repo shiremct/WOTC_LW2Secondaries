@@ -50,7 +50,7 @@ function Init()
 
     AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.AbilityRef.ObjectID));
 
-    if (AbilityState.GetMyTemplate().TargetingMethod == class'X2TargetingMethod_Grenade')
+    if (ClassIsChildOf(AbilityState.GetMyTemplate().TargetingMethod, class'X2TargetingMethod_Grenade'))
     {
         radiusTemplate = X2AbilityMultiTarget_Radius(AbilityState.GetMyTemplate().AbilityMultiTargetStyle);
         ConeLength = radiusTemplate.GetTargetRadius(AbilityState) * 1.35;
