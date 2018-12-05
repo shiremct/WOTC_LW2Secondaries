@@ -87,6 +87,18 @@
     <Content Include="Content\LWSoldierSockets.upk">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Content\LWZ_PerkContent_BlasterLauncher.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\LWZ_PerkContent_BunkerBusterProjectile.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\LWZ_PerkContent_ConcussionRocket.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\LWZ_PerkContent_RocketProjectile.upk">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Content\UILibrary_LWSecondariesWOTC.upk">
       <SubType>Content</SubType>
     </Content>
