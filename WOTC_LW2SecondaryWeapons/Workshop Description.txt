@@ -122,6 +122,8 @@ Huge thanks to [b]Erazil[/b] for the French translation. All of the dynamic abil
 
 [h1]Version History[/h1] (See Change Notes for full history)
 [list]
+1.5.0:[list]
+[*] Fixed most of the remaining visual issues (Big thanks to Musashi, who contributed this update!)[/list]
 1.4.2:[list]
 [*] Updated targeting method for Blaster Gauntlet. (Big thanks to Favid and Mr. Nice for identifying the issue!)[/list]
 1.4.1:[list]
