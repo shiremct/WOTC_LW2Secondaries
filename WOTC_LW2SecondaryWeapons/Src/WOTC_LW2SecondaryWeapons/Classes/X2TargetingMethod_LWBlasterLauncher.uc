@@ -89,8 +89,10 @@ function Update(float DeltaTime)
         DrawAOETiles(Tiles);
 
         //update expected scatter amount display
-        vMouseCursorPos = class'UIUtilities_LW'.static.GetMouseCoords();
-        ScatterAmountText.SetPosition(vMouseCursorPos.X + 2, vMouseCursorPos.Y + 14); // this follows cursor
+        //vMouseCursorPos = class'UIUtilities_LW'.static.GetMouseCoords();
+        //ScatterAmountText.SetPosition(vMouseCursorPos.X + 2, vMouseCursorPos.Y + 14); // this follows cursor
+		vMouseCursorPos = LocalPlayer(`LOCALPLAYERCONTROLLER.Player).Project(NewTargetLocation);
+        ScatterAmountText.SetPosition((vMouseCursorPos.X+1)*960 + 2, (1-vMouseCursorPos.Y)*540 + 14); // this follows cursor
         ExpectedScatter = class'X2Ability_GauntletAbilitySet'.static.GetExpectedScatter(UnitState, NewTargetLocation);
         ScatterAmountText.SetHTMLText(class'UIUtilities_LW'.static.GetHTMLAverageScatterText(ExpectedScatter));
     }

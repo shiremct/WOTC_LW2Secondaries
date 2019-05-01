@@ -60,6 +60,9 @@ static function EventListenerReturn OnGauntletOverrideHasHeavyWeapon(Object Even
 	foreach CurrentInventory(InventoryItem)
 	{
 		WeaponTemplate = X2WeaponTemplate(InventoryItem.GetMyTemplate());
+		if (WeaponTemplate == none)
+			return ELR_NoInterrupt;
+
 		WeaponCategory = WeaponTemplate.WeaponCat;
 	
 		if (WeaponCategory == 'lw_gauntlet')
