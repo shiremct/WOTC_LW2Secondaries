@@ -5,15 +5,16 @@ class X2Effect_RemoveStunOnTeamChanges extends X2Effect_Persistent;
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 	local X2EventManager				EventManager;
-	local Object						EffectObj, TargetObj;
-	local XComGameState_Unit			SourceUnit, TargetUnit;
+	local Object						EffectObj;
+	//local Object						TargetObj;
+	//local XComGameState_Unit			SourceUnit, TargetUnit;
 
-	TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-	SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+	//TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+	//SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 
 	EventManager = `XEVENTMGR;
 	EffectObj = EffectGameState;
-	TargetObj = TargetUnit;
+	//TargetObj = TargetUnit;
 
 	EventManager.RegisterForEvent(EffectObj, 'UnitChangedTeam', RemoveStun, ELD_OnStateSubmitted,,,, EffectObj);
 }
@@ -21,7 +22,8 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 // Remove stun effect
 static function EventListenerReturn RemoveStun(Object EventData, Object EventSource, XComGameState NewGameState, Name InEventID, Object CallbackData)
 {
-	local XComGameState_Unit		TargetUnit, SourceUnit, ExpectedTargetUnit;
+	local XComGameState_Unit		TargetUnit, ExpectedTargetUnit;
+	//local XComGameState_Unit		SourceUnit;
 	local XComGameState_Effect		EffectState;
 	local X2Effect_RemoveEffects	RemoveEffects;
 	local EffectAppliedData			ApplyData;
@@ -31,7 +33,7 @@ static function EventListenerReturn RemoveStun(Object EventData, Object EventSou
 	ExpectedTargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 
 	// Get the Target Unit that actually triggered the event
-	SourceUnit = XComGameState_Unit(EventSource);
+	//SourceUnit = XComGameState_Unit(EventSource);
 	TargetUnit = XComGameState_Unit(EventData);
 
 	// Check that the TargetUnit is the Expected TargetUnit

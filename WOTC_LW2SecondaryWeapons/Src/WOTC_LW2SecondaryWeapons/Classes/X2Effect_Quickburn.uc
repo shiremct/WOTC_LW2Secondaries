@@ -29,7 +29,7 @@ function bool GetExtValue(LWTuple Data)
 {
 	local XComGameState_Unit			SourceUnit;
 	local XComGameState_Ability			AbilityState;
-	local XComGameState_Effect			EffectState;
+	//local XComGameState_Effect			EffectState;
 	local X2AbilityCost_ActionPoints	ActionPointCost;
 	local X2AbilityCost					Cost;
 	local name							Type;
@@ -38,7 +38,7 @@ function bool GetExtValue(LWTuple Data)
 	{
 		SourceUnit = XComGameState_Unit(Data.Data[0].o);
 		AbilityState = XComGameState_Ability(Data.Data[1].o);
-		EffectState = XComGameState_Effect(Data.Data[2].o);
+		//EffectState = XComGameState_Effect(Data.Data[2].o);
 
 		if (default.QUICKBURN_VALID_ABILITIES.Find(AbilityState.GetMyTemplateName()) != -1)
 		{

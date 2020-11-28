@@ -351,47 +351,49 @@ static function X2AbilityTemplate AddSawedOffReload()
     
     `CREATE_X2ABILITY_TEMPLATE(Template, 'SawedOffReload');
     
-    ActionPointCost = new class'X2AbilityCost_ActionPoints';
-    ActionPointCost.iNumPoints = 1;
-    ActionPointCost.bConsumeAllPoints = false;
-    Template.AbilityCosts.AddItem(ActionPointCost);
- 
-    ShooterPropertyCondition = new class'X2Condition_UnitProperty'; 
-    ShooterPropertyCondition.ExcludeDead = true;
-    Template.AbilityShooterConditions.AddItem(ShooterPropertyCondition);
- 
-    WeaponCondition = new class'X2Condition_AbilitySourceWeapon';
-    WeaponCondition.WantsReload = true;
-    Template.AbilityShooterConditions.AddItem(WeaponCondition);
- 
-    SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
-    Template.AddShooterEffectExclusions(SkipExclusions);
- 
-    InputTrigger = new class'X2AbilityTrigger_PlayerInput';
-    Template.AbilityTriggers.AddItem(InputTrigger);
- 
-    Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = default.SelfTarget;
-    
-    Template.AbilitySourceName = 'eAbilitySource_Standard';
-    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
-	Template.IconImage = "img:///UILibrary_LWSecondariesWOTC.UIPerk_ReloadSawedOff";
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.STANDARD_PISTOL_SHOT_PRIORITY + 2;
- 
-    Template.bDisplayInUITooltip = false;
-    Template.bDisplayInUITacticalText = false;
-    Template.DisplayTargetHitChance = false;
-    Template.bDontDisplayInAbilitySummary = false;
-    
-    Template.CustomFireAnim = 'HL_ReloadSawedOffA';
-    Template.bSkipExitCoverWhenFiring = false;
-    Template.ActivationSpeech = 'Reloading';
-    Template.Hostility = eHostility_Neutral;
-    Template.CinescriptCameraType = "GenericAccentCam";
-    Template.BuildNewGameStateFn = class'X2Ability_DefaultAbilitySet'.static.ReloadAbility_BuildGameState;
-    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;  
- 
-    return Template;    
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1;
+	ActionPointCost.bConsumeAllPoints = false;
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	// Charges
+	ShooterPropertyCondition = new class'X2Condition_UnitProperty';	
+	ShooterPropertyCondition.ExcludeDead = true;
+	Template.AbilityShooterConditions.AddItem(ShooterPropertyCondition);
+
+	WeaponCondition = new class'X2Condition_AbilitySourceWeapon';
+	WeaponCondition.WantsReload = true;
+	Template.AbilityShooterConditions.AddItem(WeaponCondition);
+
+	SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
+	Template.AddShooterEffectExclusions(SkipExclusions);
+
+	InputTrigger = new class'X2AbilityTrigger_PlayerInput';
+	Template.AbilityTriggers.AddItem(InputTrigger);
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	
+	Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+	Template.IconImage = "img:///'UILibrary_RPGO.UIPerk_ReloadSawedOff'";
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.RELOAD_PRIORITY;
+
+	Template.bDisplayInUITooltip = false;
+	Template.bDisplayInUITacticalText = false;
+	Template.DisplayTargetHitChance = false;
+	Template.bDontDisplayInAbilitySummary = false;
+	
+	Template.CustomFireAnim = 'HL_ReloadSawedOffA';
+	Template.CustomSelfFireAnim = 'HL_ReloadSawedOffA';
+	Template.bSkipExitCoverWhenFiring = false;
+	Template.ActivationSpeech = 'Reloading';
+	Template.Hostility = eHostility_Neutral;
+	Template.CinescriptCameraType = "GenericAccentCam";
+	Template.BuildNewGameStateFn = class'X2Ability_DefaultAbilitySet'.static.ReloadAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	
+
+	return Template;	
 }
 
 simulated function SawedOffReloadAbility_BuildVisualization(XComGameState VisualizeGameState)

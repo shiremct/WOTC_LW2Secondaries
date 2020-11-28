@@ -23,7 +23,6 @@ event ExpandHandler(string InString, out string OutString)
 	local XComGameState_Effect		EffectState;
 	local UITacticalHUD				TacticalHUD;
 	local int						iVal;
-	local string					sStr;
 
 	Type = name(InString);
 	History = `XCOMHISTORY;
@@ -98,9 +97,9 @@ event ExpandHandler(string InString, out string OutString)
 				AbilityState = XComGameState_Ability(ParseObj);
 				EffectState = XComGameState_Effect(ParseObj);
 				if (AbilityState != none)
-					TargetUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
+					TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
 				else if (EffectState != none)
-					TargetUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+					TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 			}
 			if (TargetUnitState != none)
 			{
@@ -246,9 +245,9 @@ event ExpandHandler(string InString, out string OutString)
 			AbilityState = XComGameState_Ability(ParseObj);
 			EffectState = XComGameState_Effect(ParseObj);
 			if (AbilityState != none)
-				TargetUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
+				TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
 			else if (EffectState != none)
-				TargetUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+				TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 			if (TacticalHUD != none && TacticalHUD.GetTargetingMethod() != none && TargetUnitState != none)
 			{
 				iVal = class'X2Ability_GauntletAbilitySet'.static.GetNumAimRolls(TargetUnitState);
@@ -309,9 +308,9 @@ event ExpandHandler(string InString, out string OutString)
 				AbilityState = XComGameState_Ability(ParseObj);
 				EffectState = XComGameState_Effect(ParseObj);
 				if (AbilityState != none)
-					TargetUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
+					TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
 				else if (EffectState != none)
-					TargetUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+					TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 			}
 			if (TargetUnitState != none)
 			{
@@ -337,9 +336,9 @@ event ExpandHandler(string InString, out string OutString)
 				AbilityState = XComGameState_Ability(ParseObj);
 				EffectState = XComGameState_Effect(ParseObj);
 				if (AbilityState != none)
-					TargetUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
+					TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
 				else if (EffectState != none)
-					TargetUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+					TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 			}
 			if (TargetUnitState != none)
 			{
@@ -365,9 +364,9 @@ event ExpandHandler(string InString, out string OutString)
 				AbilityState = XComGameState_Ability(ParseObj);
 				EffectState = XComGameState_Effect(ParseObj);
 				if (AbilityState != none)
-					TargetUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
+					TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
 				else if (EffectState != none)
-					TargetUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+					TargetUnitState = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 			}
 			if (TargetUnitState != none)
 			{
