@@ -7,10 +7,14 @@
 //---------------------------------------------------------------------------------------
 class X2Item_LWHolotargeter extends X2Item config(GameData_WeaponData);
 
-// ***** UI Image definitions  *****
+// ***** UI Image and item Archetype definitions  *****
 var config string Holotargeter_CV_UIImage;
 var config string Holotargeter_MG_UIImage;
 var config string Holotargeter_BM_UIImage;
+
+var config string Holotargeter_CV_GameArchetype;
+var config string Holotargeter_MG_GameArchetype;
+var config string Holotargeter_BM_GameArchetype;
 
 // ***** Damage arrays for attack actions  *****
 var config WeaponDamageValue Holotargeter_CONVENTIONAL_BASEDAMAGE;
@@ -50,11 +54,22 @@ var config int Holotargeter_MAGNETIC_SCHEMATIC_ALLOYCOST;
 var config int Holotargeter_MAGNETIC_SCHEMATIC_ELERIUMCOST;
 var config int Holotargeter_MAGNETIC_SCHEMATIC_ELERIUMCORECOST;
 
+var config int Holotargeter_MAGNETIC_SCHEMATIC_LEGEND_SUPPLYCOST;
+var config int Holotargeter_MAGNETIC_SCHEMATIC_LEGEND_ALLOYCOST;
+var config int Holotargeter_MAGNETIC_SCHEMATIC_LEGEND_ELERIUMCOST;
+var config int Holotargeter_MAGNETIC_SCHEMATIC_LEGEND_ELERIUMCORECOST;
+
 var config int Holotargeter_MAGNETIC_INDIVIDUAL_SUPPLYCOST;
 var config int Holotargeter_MAGNETIC_INDIVIDUAL_ALLOYCOST;
 var config int Holotargeter_MAGNETIC_INDIVIDUAL_ELERIUMCOST;
 var config int Holotargeter_MAGNETIC_INDIVIDUAL_ELERIUMCORECOST;
 var config int Holotargeter_MAGNETIC_INDIVIDUAL_TRADINGPOSTVALUE;
+
+var config int Holotargeter_MAGNETIC_INDIVIDUAL_LEGEND_SUPPLYCOST;
+var config int Holotargeter_MAGNETIC_INDIVIDUAL_LEGEND_ALLOYCOST;
+var config int Holotargeter_MAGNETIC_INDIVIDUAL_LEGEND_ELERIUMCOST;
+var config int Holotargeter_MAGNETIC_INDIVIDUAL_LEGEND_ELERIUMCORECOST;
+var config int Holotargeter_MAGNETIC_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE;
 
 var config array<name> Holotargeter_MAGNETIC_REQUIRED_TECHS;
 
@@ -63,12 +78,24 @@ var config int Holotargeter_BEAM_SCHEMATIC_ALLOYCOST;
 var config int Holotargeter_BEAM_SCHEMATIC_ELERIUMCOST;
 var config int Holotargeter_BEAM_SCHEMATIC_ELERIUMCORECOST;
 
+var config int Holotargeter_BEAM_SCHEMATIC_LEGEND_SUPPLYCOST;
+var config int Holotargeter_BEAM_SCHEMATIC_LEGEND_ALLOYCOST;
+var config int Holotargeter_BEAM_SCHEMATIC_LEGEND_ELERIUMCOST;
+var config int Holotargeter_BEAM_SCHEMATIC_LEGEND_ELERIUMCORECOST;
+
 var config int Holotargeter_BEAM_INDIVIDUAL_SUPPLYCOST;
 var config int Holotargeter_BEAM_INDIVIDUAL_ALLOYCOST;
 var config int Holotargeter_BEAM_INDIVIDUAL_ELERIUMCOST;
 var config int Holotargeter_BEAM_INDIVIDUAL_ELERIUMCORECOST;
 var config int Holotargeter_BEAM_INDIVIDUAL_ITEMCOST;
 var config int Holotargeter_BEAM_INDIVIDUAL_TRADINGPOSTVALUE;
+
+var config int Holotargeter_BEAM_INDIVIDUAL_LEGEND_SUPPLYCOST;
+var config int Holotargeter_BEAM_INDIVIDUAL_LEGEND_ALLOYCOST;
+var config int Holotargeter_BEAM_INDIVIDUAL_LEGEND_ELERIUMCOST;
+var config int Holotargeter_BEAM_INDIVIDUAL_LEGEND_ELERIUMCORECOST;
+var config int Holotargeter_BEAM_INDIVIDUAL_LEGEND_ITEMCOST;
+var config int Holotargeter_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE;
 
 var config array<name> Holotargeter_BEAM_REQUIRED_TECHS;
 
@@ -84,7 +111,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(CreateTemplate_Holotargeter_Beam());
 
 	// Create two schematics used to upgrade weapons (If Finite Items is FALSE)
-	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.default.bFiniteItems)
+	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.static.UseFiniteItems())
 	{
 		Templates.AddItem(CreateTemplate_Holotargeter_Magnetic_Schematic());
 		Templates.AddItem(CreateTemplate_Holotargeter_Beam_Schematic());
@@ -109,7 +136,7 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Conventional()
 	Template.strImage = default.Holotargeter_CV_UIImage;
 	Template.EquipSound = "Secondary_Weapon_Equip_Conventional";
 	Template.WeaponPanelImage = "_ConventionalRifle";                       // used by the UI. Probably determines iconview of the weapon.
-	Template.Tier = 0;
+	Template.Tier = 6;
 
 	Template.InventorySlot = eInvSlot_SecondaryWeapon;
 
@@ -133,7 +160,7 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Conventional()
 	}
 
 	// This contains all the resources; sounds, animations, models, physics, the works.
-	Template.GameArchetype = "LWHolotargeterWOTC.Archetypes.WP_Holotargeter_CV";
+	Template.GameArchetype = default.Holotargeter_CV_GameArchetype;
 
 	Template.iPhysicsImpulse = 5;
 
@@ -141,7 +168,7 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Conventional()
 	Template.bInfiniteItem = true;
 	Template.CanBeBuilt = false;
 
-	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.default.bFiniteItems)
+	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.static.UseFiniteItems())
 	{
 		if (class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.default.bHidePreviousTiers)
 		{
@@ -158,7 +185,6 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Conventional()
 static function X2DataTemplate CreateTemplate_Holotargeter_Magnetic()
 {
 	local X2WeaponTemplate	Template;
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost;
 	local name				TechRequirement;
 	local name				AbilityName;
 
@@ -170,7 +196,7 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Magnetic()
 	Template.strImage = default.Holotargeter_MG_UIImage;
 	Template.EquipSound = "Secondary_Weapon_Equip_Magnetic";
 	Template.WeaponPanelImage = "_MagneticRifle";                       // used by the UI. Probably determines iconview of the weapon.
-	Template.Tier = 2;
+	Template.Tier = 7;
 	
 	Template.InventorySlot = eInvSlot_SecondaryWeapon;
 
@@ -194,19 +220,18 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Magnetic()
 	}	
 
 	// This contains all the resources; sounds, animations, models, physics, the works.
-	Template.GameArchetype = "LWHolotargeterWOTC.Archetypes.WP_Holotargeter_MG";
+	Template.GameArchetype = default.Holotargeter_MG_GameArchetype;
 
 	Template.iPhysicsImpulse = 5;
+	Template.DamageTypeTemplateName = 'Electrical';
 	
-	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.default.bFiniteItems)
+	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.static.UseFiniteItems())
 	{
 		if (class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.default.bHidePreviousTiers)
 		{
 			Template.HideIfPurchased = 'Holotargeter_BM_Schematic';
-	}	}
+		}
 
-	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.default.bFiniteItems)
-	{
 		Template.CreatorTemplateName = 'Holotargeter_MG_Schematic'; // The schematic which creates this item
 		Template.BaseItem = 'Holotargeter_CV'; // Which item this will be upgraded from
 		Template.CanBeBuilt = false;
@@ -218,7 +243,51 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Magnetic()
 		{
 			Template.Requirements.RequiredTechs.AddItem(TechRequirement);
 		}
-		
+
+		Template.CanBeBuilt = true;
+		Template.bInfiniteItem = false;
+	}
+
+	return Template;
+}
+
+static function SetMagHolotargeterPricing(X2WeaponTemplate Template, bool bLegend)
+{
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+
+	if (bLegend)
+	{
+		if (default.Holotargeter_MAGNETIC_INDIVIDUAL_LEGEND_SUPPLYCOST > 0)
+		{
+			SupplyCost.ItemTemplateName = 'Supplies';
+			SupplyCost.Quantity = default.Holotargeter_MAGNETIC_INDIVIDUAL_LEGEND_SUPPLYCOST;
+			Template.Cost.ResourceCosts.AddItem(SupplyCost);
+		}
+		if (default.Holotargeter_MAGNETIC_INDIVIDUAL_LEGEND_ALLOYCOST > 0)
+		{
+			AlloyCost.ItemTemplateName = 'AlienAlloy';
+			AlloyCost.Quantity = default.Holotargeter_MAGNETIC_INDIVIDUAL_LEGEND_ALLOYCOST;
+			Template.Cost.ResourceCosts.AddItem(AlloyCost);
+		}
+		if (default.Holotargeter_MAGNETIC_INDIVIDUAL_LEGEND_ELERIUMCOST > 0)
+		{
+			EleriumCost.ItemTemplateName = 'EleriumDust';
+			EleriumCost.Quantity = default.Holotargeter_MAGNETIC_INDIVIDUAL_LEGEND_ELERIUMCOST;
+			Template.Cost.ResourceCosts.AddItem(EleriumCost);
+		}
+		if (default.Holotargeter_MAGNETIC_INDIVIDUAL_LEGEND_ELERIUMCORECOST > 0)
+		{
+			CoreCost.ItemTemplateName = 'EleriumCore';
+			CoreCost.Quantity = default.Holotargeter_MAGNETIC_INDIVIDUAL_LEGEND_ELERIUMCORECOST;
+			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+		if (default.Holotargeter_MAGNETIC_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE > 0)
+		{
+			Template.TradingPostValue = default.Holotargeter_MAGNETIC_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE;
+		}
+	}
+	else
+	{
 		if (default.Holotargeter_MAGNETIC_INDIVIDUAL_SUPPLYCOST > 0)
 		{
 			SupplyCost.ItemTemplateName = 'Supplies';
@@ -247,14 +316,7 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Magnetic()
 		{
 			Template.TradingPostValue = default.Holotargeter_MAGNETIC_INDIVIDUAL_TRADINGPOSTVALUE;
 		}
-
-		Template.CanBeBuilt = true;
-		Template.bInfiniteItem = false;
 	}
-
-	Template.DamageTypeTemplateName = 'Electrical';
-
-	return Template;
 }
 
 
@@ -262,7 +324,6 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Magnetic()
 static function X2DataTemplate CreateTemplate_Holotargeter_Beam()
 {
 	local X2WeaponTemplate	Template;
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
 	local name				TechRequirement;
 	local name				AbilityName;
 
@@ -274,7 +335,7 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Beam()
 	Template.strImage = default.Holotargeter_BM_UIImage;
 	Template.EquipSound = "Secondary_Weapon_Equip_Beam";
 	Template.WeaponPanelImage = "_BeamRifle";                       // used by the UI. Probably determines iconview of the weapon.
-	Template.Tier = 4;
+	Template.Tier = 8;
 
 	Template.InventorySlot = eInvSlot_SecondaryWeapon;
 	
@@ -298,11 +359,12 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Beam()
 	}
 	
 	// This all the resources; sounds, animations, models, physics, the works.
-	Template.GameArchetype = "LWHolotargeterWOTC.Archetypes.WP_Holotargeter_BM";
+	Template.GameArchetype = default.Holotargeter_BM_GameArchetype;
 
 	Template.iPhysicsImpulse = 5;
+	Template.DamageTypeTemplateName = 'Electrical';
 
-	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.default.bFiniteItems)
+	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.static.UseFiniteItems())
 	{
 		Template.CreatorTemplateName = 'Holotargeter_BM_Schematic'; // The schematic which creates this item
 		Template.BaseItem = 'Holotargeter_MG'; // Which item this will be upgraded from
@@ -316,6 +378,50 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Beam()
 			Template.Requirements.RequiredTechs.AddItem(TechRequirement);
 		}
 		
+		Template.CanBeBuilt = true;
+		Template.bInfiniteItem = false;
+	}
+
+	return Template;
+}
+
+static function SetBeamHolotargeterPricing(X2WeaponTemplate Template, bool bLegend)
+{
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+
+	if (bLegend)
+	{
+		if (default.Holotargeter_BEAM_INDIVIDUAL_LEGEND_SUPPLYCOST > 0)
+		{
+			SupplyCost.ItemTemplateName = 'Supplies';
+			SupplyCost.Quantity = default.Holotargeter_BEAM_INDIVIDUAL_LEGEND_SUPPLYCOST;
+			Template.Cost.ResourceCosts.AddItem(SupplyCost);
+		}
+		if (default.Holotargeter_BEAM_INDIVIDUAL_LEGEND_ALLOYCOST > 0)
+		{
+			AlloyCost.ItemTemplateName = 'AlienAlloy';
+			AlloyCost.Quantity = default.Holotargeter_BEAM_INDIVIDUAL_LEGEND_ALLOYCOST;
+			Template.Cost.ResourceCosts.AddItem(AlloyCost);
+		}
+		if (default.Holotargeter_BEAM_INDIVIDUAL_LEGEND_ELERIUMCOST > 0)
+		{
+			EleriumCost.ItemTemplateName = 'EleriumDust';
+			EleriumCost.Quantity = default.Holotargeter_BEAM_INDIVIDUAL_LEGEND_ELERIUMCOST;
+			Template.Cost.ResourceCosts.AddItem(EleriumCost);
+		}
+		if (default.Holotargeter_BEAM_INDIVIDUAL_LEGEND_ELERIUMCORECOST > 0)
+		{
+			CoreCost.ItemTemplateName = 'EleriumCore';
+			CoreCost.Quantity = default.Holotargeter_BEAM_INDIVIDUAL_LEGEND_ELERIUMCORECOST;
+			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+		if (default.Holotargeter_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE > 0)
+		{
+			Template.TradingPostValue = default.Holotargeter_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE;
+		}
+	}
+	else
+	{
 		if (default.Holotargeter_BEAM_INDIVIDUAL_SUPPLYCOST > 0)
 		{
 			SupplyCost.ItemTemplateName = 'Supplies';
@@ -340,24 +446,11 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Beam()
 			CoreCost.Quantity = default.Holotargeter_BEAM_INDIVIDUAL_ELERIUMCORECOST;
 			Template.Cost.ResourceCosts.AddItem(CoreCost);
 		}
-		if (default.Holotargeter_BEAM_INDIVIDUAL_ITEMCOST > 0)
-		{
-			ItemCost.ItemTemplateName = 'Holotargeter_MG';
-			ItemCost.Quantity = default.Holotargeter_BEAM_INDIVIDUAL_ITEMCOST;
-			Template.Cost.ResourceCosts.AddItem(ItemCost);
-		}
 		if (default.Holotargeter_BEAM_INDIVIDUAL_TRADINGPOSTVALUE > 0)
 		{
 			Template.TradingPostValue = default.Holotargeter_BEAM_INDIVIDUAL_TRADINGPOSTVALUE;
 		}
-
-		Template.CanBeBuilt = true;
-		Template.bInfiniteItem = false;
 	}
-
-	Template.DamageTypeTemplateName = 'Electrical';
-
-	return Template;
 }
 
 
@@ -365,7 +458,6 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Beam()
 static function X2DataTemplate CreateTemplate_Holotargeter_Magnetic_Schematic()
 {
 	local X2SchematicTemplate	Template;
-	local ArtifactCost			SupplyCost, AlloyCost, EleriumCost, CoreCost;
 	local name					TechRequirement;
 
 	`CREATE_X2TEMPLATE(class'X2SchematicTemplate', Template, 'Holotargeter_MG_Schematic');
@@ -381,7 +473,6 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Magnetic_Schematic()
 
 	// Reference Item
 	Template.ReferenceItemTemplate = 'Holotargeter_MG';
-	Template.HideIfPurchased = 'Holotargeter_BM';
 
 	// Requirements
 	foreach default.Holotargeter_MAGNETIC_REQUIRED_TECHS(TechRequirement)
@@ -391,33 +482,67 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Magnetic_Schematic()
 	Template.Requirements.RequiredEngineeringScore = 10;
 	Template.Requirements.bVisibleIfPersonnelGatesNotMet = true;
 
-	// Cost
-	if (default.Holotargeter_MAGNETIC_SCHEMATIC_SUPPLYCOST > 0)
-	{
-		SupplyCost.ItemTemplateName = 'Supplies';
-		SupplyCost.Quantity = default.Holotargeter_MAGNETIC_SCHEMATIC_SUPPLYCOST;
-		Template.Cost.ResourceCosts.AddItem(SupplyCost);
-	}
-	if (default.Holotargeter_MAGNETIC_SCHEMATIC_ALLOYCOST > 0)
-	{
-		AlloyCost.ItemTemplateName = 'AlienAlloy';
-		AlloyCost.Quantity = default.Holotargeter_MAGNETIC_SCHEMATIC_ALLOYCOST;
-		Template.Cost.ResourceCosts.AddItem(AlloyCost);
-	}
-	if (default.Holotargeter_MAGNETIC_SCHEMATIC_ELERIUMCOST > 0)
-	{
-		EleriumCost.ItemTemplateName = 'EleriumDust';
-		EleriumCost.Quantity = default.Holotargeter_MAGNETIC_SCHEMATIC_ELERIUMCOST;
-		Template.Cost.ResourceCosts.AddItem(EleriumCost);
-	}
-	if (default.Holotargeter_MAGNETIC_SCHEMATIC_ELERIUMCORECOST > 0)
-	{
-		CoreCost.ItemTemplateName = 'EleriumCore';
-		CoreCost.Quantity = default.Holotargeter_MAGNETIC_SCHEMATIC_ELERIUMCORECOST;
-		Template.Cost.ResourceCosts.AddItem(CoreCost);
-	}
-
 	return Template;
+}
+
+static function SetMagHolotargeterSchematicPricing(X2SchematicTemplate Template, bool bLegend)
+{
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+
+	if (bLegend)
+	{
+		if (default.Holotargeter_MAGNETIC_SCHEMATIC_LEGEND_SUPPLYCOST > 0)
+		{
+			SupplyCost.ItemTemplateName = 'Supplies';
+			SupplyCost.Quantity = default.Holotargeter_MAGNETIC_SCHEMATIC_LEGEND_SUPPLYCOST;
+			Template.Cost.ResourceCosts.AddItem(SupplyCost);
+		}
+		if (default.Holotargeter_MAGNETIC_SCHEMATIC_LEGEND_ALLOYCOST > 0)
+		{
+			AlloyCost.ItemTemplateName = 'AlienAlloy';
+			AlloyCost.Quantity = default.Holotargeter_MAGNETIC_SCHEMATIC_LEGEND_ALLOYCOST;
+			Template.Cost.ResourceCosts.AddItem(AlloyCost);
+		}
+		if (default.Holotargeter_MAGNETIC_SCHEMATIC_LEGEND_ELERIUMCOST > 0)
+		{
+			EleriumCost.ItemTemplateName = 'EleriumDust';
+			EleriumCost.Quantity = default.Holotargeter_MAGNETIC_SCHEMATIC_LEGEND_ELERIUMCOST;
+			Template.Cost.ResourceCosts.AddItem(EleriumCost);
+		}
+		if (default.Holotargeter_MAGNETIC_SCHEMATIC_LEGEND_ELERIUMCORECOST > 0)
+		{
+			CoreCost.ItemTemplateName = 'EleriumCore';
+			CoreCost.Quantity = default.Holotargeter_MAGNETIC_SCHEMATIC_LEGEND_ELERIUMCORECOST;
+			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+	}
+	else
+	{
+		if (default.Holotargeter_MAGNETIC_SCHEMATIC_SUPPLYCOST > 0)
+		{
+			SupplyCost.ItemTemplateName = 'Supplies';
+			SupplyCost.Quantity = default.Holotargeter_MAGNETIC_SCHEMATIC_SUPPLYCOST;
+			Template.Cost.ResourceCosts.AddItem(SupplyCost);
+		}
+		if (default.Holotargeter_MAGNETIC_SCHEMATIC_ALLOYCOST > 0)
+		{
+			AlloyCost.ItemTemplateName = 'AlienAlloy';
+			AlloyCost.Quantity = default.Holotargeter_MAGNETIC_SCHEMATIC_ALLOYCOST;
+			Template.Cost.ResourceCosts.AddItem(AlloyCost);
+		}
+		if (default.Holotargeter_MAGNETIC_SCHEMATIC_ELERIUMCOST > 0)
+		{
+			EleriumCost.ItemTemplateName = 'EleriumDust';
+			EleriumCost.Quantity = default.Holotargeter_MAGNETIC_SCHEMATIC_ELERIUMCOST;
+			Template.Cost.ResourceCosts.AddItem(EleriumCost);
+		}
+		if (default.Holotargeter_MAGNETIC_SCHEMATIC_ELERIUMCORECOST > 0)
+		{
+			CoreCost.ItemTemplateName = 'EleriumCore';
+			CoreCost.Quantity = default.Holotargeter_MAGNETIC_SCHEMATIC_ELERIUMCORECOST;
+			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+	}
 }
 
 
@@ -425,7 +550,6 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Magnetic_Schematic()
 static function X2DataTemplate CreateTemplate_Holotargeter_Beam_Schematic()
 {
 	local X2SchematicTemplate	Template;
-	local ArtifactCost			SupplyCost, AlloyCost, EleriumCost, CoreCost;
 	local name					TechRequirement;
 
 	`CREATE_X2TEMPLATE(class'X2SchematicTemplate', Template, 'Holotargeter_BM_Schematic');
@@ -451,33 +575,67 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Beam_Schematic()
 	Template.Requirements.RequiredEngineeringScore = 20;
 	Template.Requirements.bVisibleIfPersonnelGatesNotMet = true;
 
-	// Cost
-	if (default.Holotargeter_BEAM_SCHEMATIC_SUPPLYCOST > 0)
-	{
-		SupplyCost.ItemTemplateName = 'Supplies';
-		SupplyCost.Quantity = default.Holotargeter_BEAM_SCHEMATIC_SUPPLYCOST;
-		Template.Cost.ResourceCosts.AddItem(SupplyCost);
-	}
-	if (default.Holotargeter_BEAM_SCHEMATIC_ALLOYCOST > 0)
-	{
-		AlloyCost.ItemTemplateName = 'AlienAlloy';
-		AlloyCost.Quantity = default.Holotargeter_BEAM_SCHEMATIC_ALLOYCOST;
-		Template.Cost.ResourceCosts.AddItem(AlloyCost);
-	}
-	if (default.Holotargeter_BEAM_SCHEMATIC_ELERIUMCOST > 0)
-	{
-		EleriumCost.ItemTemplateName = 'EleriumDust';
-		EleriumCost.Quantity = default.Holotargeter_BEAM_SCHEMATIC_ELERIUMCOST;
-		Template.Cost.ResourceCosts.AddItem(EleriumCost);
-	}
-	if (default.Holotargeter_BEAM_SCHEMATIC_ELERIUMCORECOST > 0)
-	{
-		CoreCost.ItemTemplateName = 'EleriumCore';
-		CoreCost.Quantity = default.Holotargeter_BEAM_SCHEMATIC_ELERIUMCORECOST;
-		Template.Cost.ResourceCosts.AddItem(CoreCost);
-	}
-
 	return Template;
+}
+
+static function SetBeamHolotargeterSchematicPricing(X2SchematicTemplate Template, bool bLegend)
+{
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+
+	if (bLegend)
+	{
+		if (default.Holotargeter_BEAM_SCHEMATIC_LEGEND_SUPPLYCOST > 0)
+		{
+			SupplyCost.ItemTemplateName = 'Supplies';
+			SupplyCost.Quantity = default.Holotargeter_BEAM_SCHEMATIC_LEGEND_SUPPLYCOST;
+			Template.Cost.ResourceCosts.AddItem(SupplyCost);
+		}
+		if (default.Holotargeter_BEAM_SCHEMATIC_LEGEND_ALLOYCOST > 0)
+		{
+			AlloyCost.ItemTemplateName = 'AlienAlloy';
+			AlloyCost.Quantity = default.Holotargeter_BEAM_SCHEMATIC_LEGEND_ALLOYCOST;
+			Template.Cost.ResourceCosts.AddItem(AlloyCost);
+		}
+		if (default.Holotargeter_BEAM_SCHEMATIC_LEGEND_ELERIUMCOST > 0)
+		{
+			EleriumCost.ItemTemplateName = 'EleriumDust';
+			EleriumCost.Quantity = default.Holotargeter_BEAM_SCHEMATIC_LEGEND_ELERIUMCOST;
+			Template.Cost.ResourceCosts.AddItem(EleriumCost);
+		}
+		if (default.Holotargeter_BEAM_SCHEMATIC_LEGEND_ELERIUMCORECOST > 0)
+		{
+			CoreCost.ItemTemplateName = 'EleriumCore';
+			CoreCost.Quantity = default.Holotargeter_BEAM_SCHEMATIC_LEGEND_ELERIUMCORECOST;
+			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+	}
+	else
+	{
+		if (default.Holotargeter_BEAM_SCHEMATIC_SUPPLYCOST > 0)
+		{
+			SupplyCost.ItemTemplateName = 'Supplies';
+			SupplyCost.Quantity = default.Holotargeter_BEAM_SCHEMATIC_SUPPLYCOST;
+			Template.Cost.ResourceCosts.AddItem(SupplyCost);
+		}
+		if (default.Holotargeter_BEAM_SCHEMATIC_ALLOYCOST > 0)
+		{
+			AlloyCost.ItemTemplateName = 'AlienAlloy';
+			AlloyCost.Quantity = default.Holotargeter_BEAM_SCHEMATIC_ALLOYCOST;
+			Template.Cost.ResourceCosts.AddItem(AlloyCost);
+		}
+		if (default.Holotargeter_BEAM_SCHEMATIC_ELERIUMCOST > 0)
+		{
+			EleriumCost.ItemTemplateName = 'EleriumDust';
+			EleriumCost.Quantity = default.Holotargeter_BEAM_SCHEMATIC_ELERIUMCOST;
+			Template.Cost.ResourceCosts.AddItem(EleriumCost);
+		}
+		if (default.Holotargeter_BEAM_SCHEMATIC_ELERIUMCORECOST > 0)
+		{
+			CoreCost.ItemTemplateName = 'EleriumCore';
+			CoreCost.Quantity = default.Holotargeter_BEAM_SCHEMATIC_ELERIUMCORECOST;
+			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+	}
 }
 
 

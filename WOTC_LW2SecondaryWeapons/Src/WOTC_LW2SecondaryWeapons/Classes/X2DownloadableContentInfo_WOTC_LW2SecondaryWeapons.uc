@@ -13,6 +13,8 @@ var config array<SocketReplacementInfo> SocketReplacements;
 
 // Variables referenced by many other classes - general toggles, etc.
 var config bool bFiniteItems;
+var config bool bAutoDetectPrototypeArmoury;
+var config bool bOverwritePrototypeArmouryCosts;
 var config bool bHidePreviousTiers;
 
 // Variables to control updating base game class abilities to have proper weapon restrictions
@@ -105,8 +107,141 @@ static function ManageTemplates()
 static event OnPostTemplatesCreated()
 {
 	UpdateAbilityTemplates();
+	SetItemAndSchematicCosts();
 	ChainAbilityTag();
 }
+
+
+// Update base game Secondary Weapon ability templates to add a weapon restriction
+static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState, optional bool bMultiplayerDisplay)
+{
+	local XComGameState_Item	InventoryItem;
+	local X2WeaponTemplate		WeaponTemplate;
+	local int i;
+	
+	if (default.bEditAbilityTemplatesForBaseClasses)
+	{
+		for (i = SetupData.Length - 1; i >= 0; i--)
+		{
+
+			// Check Restricted Pistol Skills
+			if (default.EDIT_ABILITIES_PISTOL.Find(SetupData[i].TemplateName) != -1)
+			{
+				if (SetupData[i].SourceWeaponRef.ObjectID == 0)
+				{
+					// Ability does not have a source item definied - skipping weapon category checks
+					`Log("LW2 Secondaries - FinalizeUnitAbilitiesForInit: Evaluating equipment for" $ SetupData[i].TemplateName $ "- No SourceWeapon defined for ability... skipping weapon category checks.",, 'LW2_Secondaries');
+					continue;
+				}
+
+				InventoryItem = XComGameState_Item(`XCOMHISTORY.GetGameStateForObjectID(SetupData[i].SourceWeaponRef.ObjectID));
+				if (InventoryItem != none)
+				{
+					WeaponTemplate = X2WeaponTemplate(InventoryItem.GetMyTemplate());
+					if (WeaponTemplate != none)
+					{
+						if (default.VALID_WEAPON_CATEGORIES_FOR_PISTOL_SKILLS.Find(WeaponTemplate.WeaponCat) != -1)
+						{
+							// Ability is tied to a correct weapon category - continue iterating through unit abilities
+							`Log("LW2 Secondaries - FinalizeUnitAbilitiesForInit: Evaluating equipment for" $ SetupData[i].TemplateName $ "- SourceWeapon matches expected category (Pistols)... Leave Ability.",, 'LW2_Secondaries');
+							continue;
+						}
+						else
+						{
+							// Ability is NOT tied to a correct weapon category - remove ability from unit
+							`Log("LW2 Secondaries - FinalizeUnitAbilitiesForInit: Evaluating equipment for" $ SetupData[i].TemplateName $ "- SourceWeapon does not match expected category (Pistols)... Remove Ability.",, 'LW2_Secondaries');
+							SetupData.Remove(i, 1);
+							continue;
+				}	}	}				
+			}
+
+
+			// Check Restricted Gremlin Skills
+			if (default.EDIT_ABILITIES_GREMLIN.Find(SetupData[i].TemplateName) != -1)
+			{
+				if (SetupData[i].SourceWeaponRef.ObjectID == 0)
+				{
+					// Ability does not have a source item definied - skipping weapon category checks
+					`Log("LW2 Secondaries - FinalizeUnitAbilitiesForInit: Evaluating equipment for" $ SetupData[i].TemplateName $ "- No SourceWeapon defined for ability... skipping weapon category checks.",, 'LW2_Secondaries');
+					continue;
+				}
+
+				InventoryItem = XComGameState_Item(`XCOMHISTORY.GetGameStateForObjectID(SetupData[i].SourceWeaponRef.ObjectID));
+				if (InventoryItem != none)
+				{
+					WeaponTemplate = X2WeaponTemplate(InventoryItem.GetMyTemplate());
+					if (WeaponTemplate != none)
+					{
+						if (default.VALID_WEAPON_CATEGORIES_FOR_GREMLIN_SKILLS.Find(WeaponTemplate.WeaponCat) != -1)
+						{
+							// Ability is tied to a correct weapon category - continue iterating through unit abilities
+							`Log("LW2 Secondaries - FinalizeUnitAbilitiesForInit: Evaluating equipment for" $ SetupData[i].TemplateName $ "- SourceWeapon matches expected category (Gremlins)... Leave Ability.",, 'LW2_Secondaries');
+							continue;
+						}
+						else
+						{
+							// Ability is NOT tied to a correct weapon category - remove ability from unit
+							`Log("LW2 Secondaries - FinalizeUnitAbilitiesForInit: Evaluating equipment for" $ SetupData[i].TemplateName $ "- SourceWeapon does not match expected category (Gremlins)... Remove Ability.",, 'LW2_Secondaries');
+							SetupData.Remove(i, 1);
+							continue;
+				}	}	}				
+			}
+
+
+			// Check Restricted Melee Skills
+			if (default.EDIT_ABILITIES_MELEE.Find(SetupData[i].TemplateName) != -1)
+			{
+				if (SetupData[i].SourceWeaponRef.ObjectID == 0)
+				{
+					// Ability does not have a source item definied - skipping weapon category checks
+					`Log("LW2 Secondaries - FinalizeUnitAbilitiesForInit: Evaluating equipment for" $ SetupData[i].TemplateName $ "- No SourceWeapon defined for ability... skipping weapon category checks.",, 'LW2_Secondaries');
+					continue;
+				}
+
+				InventoryItem = XComGameState_Item(`XCOMHISTORY.GetGameStateForObjectID(SetupData[i].SourceWeaponRef.ObjectID));
+				if (InventoryItem != none)
+				{
+					WeaponTemplate = X2WeaponTemplate(InventoryItem.GetMyTemplate());
+					if (WeaponTemplate != none)
+					{
+						if (default.VALID_WEAPON_CATEGORIES_FOR_MELEE_SKILLS.Find(WeaponTemplate.WeaponCat) != -1)
+						{
+							// Ability is tied to a correct weapon category - continue iterating through unit abilities
+							`Log("LW2 Secondaries - FinalizeUnitAbilitiesForInit: Evaluating equipment for" $ SetupData[i].TemplateName $ "- SourceWeapon matches expected category (Melee)... Leave Ability.",, 'LW2_Secondaries');
+							continue;
+						}
+						else
+						{
+							// Ability is NOT tied to a correct weapon category - remove ability from unit
+							`Log("LW2 Secondaries - FinalizeUnitAbilitiesForInit: Evaluating equipment for" $ SetupData[i].TemplateName $ "- SourceWeapon does not match expected category (Melee)... Remove Ability.",, 'LW2_Secondaries');
+							SetupData.Remove(i, 1);
+							continue;
+				}	}	}				
+			}
+
+
+			//// Check Restricted Grenade Launcher Skills
+			//if (default.EDIT_ABILITIES_LAUNCHER.Find(SetupData[i].TemplateName) != -1)
+			//{
+				//InventoryItem = XComGameState_Item(`XCOMHISTORY.GetGameStateForObjectID(SetupData[i].SourceWeaponRef.ObjectID));
+				//if (InventoryItem != none)
+				//{
+					//WeaponTemplate = X2WeaponTemplate(InventoryItem.GetMyTemplate());
+					//if (WeaponTemplate != none)
+					//{
+						//if (default.VALID_WEAPON_CATEGORIES_FOR_LAUNCHER_SKILLS.Find(WeaponTemplate.WeaponCat) != -1)
+						//{
+							//// Ability is tied to a correct weapon category - continue iterating through unit abilities
+							//continue;
+				//}	}	}
+				//
+				//// Ability is NOT tied to a correct weapon category - remove ability from unit
+				//SetupData.Remove(i, 1);
+			//}
+
+	}	}
+}
+
 
 
 // Update base game Secondary Weapon ability templates to add a weapon restriction
@@ -123,43 +258,43 @@ static function UpdateAbilityTemplates()
 	// Add weapon restrictions for Pistol Abilities
 	if (default.bEditAbilityTemplatesForBaseClasses)
 	{
-		foreach default.EDIT_ABILITIES_PISTOL(TemplateName)
-		{
-			AbilityManager.FindAbilityTemplateAllDifficulties(TemplateName, TemplateAllDifficulties);
-			foreach TemplateAllDifficulties(Template)
-			{
-				WeaponCondition = new class'X2Condition_ValidWeaponType';
-				WeaponCondition.AllowedWeaponCategories = default.VALID_WEAPON_CATEGORIES_FOR_PISTOL_SKILLS;
-				Template.AbilityShooterConditions.AddItem(WeaponCondition);
-				`Log("WOTC LW2 Secondary Weapons - Template Edits: Added pistol weapon restrictions to" @ TemplateName);
-			}
-		}
-
-		// Add weapon restrictions for Gremlin Abilities
-		foreach default.EDIT_ABILITIES_GREMLIN(TemplateName)
-		{
-			AbilityManager.FindAbilityTemplateAllDifficulties(TemplateName, TemplateAllDifficulties);
-			foreach TemplateAllDifficulties(Template)
-			{
-				WeaponCondition = new class'X2Condition_ValidWeaponType';
-				WeaponCondition.AllowedWeaponCategories = default.VALID_WEAPON_CATEGORIES_FOR_GREMLIN_SKILLS;
-				Template.AbilityShooterConditions.AddItem(WeaponCondition);
-				`Log("WOTC LW2 Secondary Weapons - Template Edits: Added gremlin weapon restrictions to" @ TemplateName);
-			}
-		}
-
-		// Add weapon restrictions for Melee Abilities
-		foreach default.EDIT_ABILITIES_MELEE(TemplateName)
-		{
-			AbilityManager.FindAbilityTemplateAllDifficulties(TemplateName, TemplateAllDifficulties);
-			foreach TemplateAllDifficulties(Template)
-			{
-				WeaponCondition = new class'X2Condition_ValidWeaponType';
-				WeaponCondition.AllowedWeaponCategories = default.VALID_WEAPON_CATEGORIES_FOR_MELEE_SKILLS;
-				Template.AbilityShooterConditions.AddItem(WeaponCondition);
-				`Log("WOTC LW2 Secondary Weapons - Template Edits: Added melee weapon restrictions to" @ TemplateName);
-			}
-		}
+		//foreach default.EDIT_ABILITIES_PISTOL(TemplateName)
+		//{
+			//AbilityManager.FindAbilityTemplateAllDifficulties(TemplateName, TemplateAllDifficulties);
+			//foreach TemplateAllDifficulties(Template)
+			//{
+				//WeaponCondition = new class'X2Condition_ValidWeaponType';
+				//WeaponCondition.AllowedWeaponCategories = default.VALID_WEAPON_CATEGORIES_FOR_PISTOL_SKILLS;
+				//Template.AbilityShooterConditions.AddItem(WeaponCondition);
+				//`Log("WOTC LW2 Secondary Weapons - Template Edits: Added pistol weapon restrictions to" @ TemplateName);
+			//}
+		//}
+		//
+		//// Add weapon restrictions for Gremlin Abilities
+		//foreach default.EDIT_ABILITIES_GREMLIN(TemplateName)
+		//{
+			//AbilityManager.FindAbilityTemplateAllDifficulties(TemplateName, TemplateAllDifficulties);
+			//foreach TemplateAllDifficulties(Template)
+			//{
+				//WeaponCondition = new class'X2Condition_ValidWeaponType';
+				//WeaponCondition.AllowedWeaponCategories = default.VALID_WEAPON_CATEGORIES_FOR_GREMLIN_SKILLS;
+				//Template.AbilityShooterConditions.AddItem(WeaponCondition);
+				//`Log("WOTC LW2 Secondary Weapons - Template Edits: Added gremlin weapon restrictions to" @ TemplateName);
+			//}
+		//}
+		//
+		//// Add weapon restrictions for Melee Abilities
+		//foreach default.EDIT_ABILITIES_MELEE(TemplateName)
+		//{
+			//AbilityManager.FindAbilityTemplateAllDifficulties(TemplateName, TemplateAllDifficulties);
+			//foreach TemplateAllDifficulties(Template)
+			//{
+				//WeaponCondition = new class'X2Condition_ValidWeaponType';
+				//WeaponCondition.AllowedWeaponCategories = default.VALID_WEAPON_CATEGORIES_FOR_MELEE_SKILLS;
+				//Template.AbilityShooterConditions.AddItem(WeaponCondition);
+				//`Log("WOTC LW2 Secondary Weapons - Template Edits: Added melee weapon restrictions to" @ TemplateName);
+			//}
+		//}
 
 		// Add weapon restrictions for Grenade Launcher Abilities
 		foreach default.EDIT_ABILITIES_LAUNCHER(TemplateName)
@@ -172,6 +307,322 @@ static function UpdateAbilityTemplates()
 				Template.AbilityShooterConditions.AddItem(WeaponCondition);
 				`Log("WOTC LW2 Secondary Weapons - Template Edits: Added grenade launcher weapon restrictions to" @ TemplateName);
 }	}	}	}
+
+
+// Set item and schematic costs for Legend and lower difficulties
+static function SetItemAndSchematicCosts()
+{
+	local X2ItemTemplateManager					ItemTemplateManager;
+	local array<X2DataTemplate>					DifficultyVariants;
+	local X2SchematicTemplate					SchematicTemplate;
+	local X2WeaponTemplate						WeaponTemplate;
+	local bool									bLegendTemplate;
+	local int									idx;									
+
+	ItemTemplateManager = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
+
+	// For Finite Items:
+	if (default.bFiniteItems || (default.bAutoDetectPrototypeArmoury && IsModInstalled('X2DownloadableContentInfo_PrototypeArmoury')))
+	{
+		if (IsModInstalled('X2DownloadableContentInfo_PrototypeArmoury') && !default.bOverwritePrototypeArmouryCosts)
+		{
+			// Do nothing so Covert Infiltration's costs will be used
+		}
+		else
+		{
+			// Arcthrower Weapons
+			ItemTemplateManager.FindDataTemplateAllDifficulties('Arcthrower_MG', DifficultyVariants);
+			for (idx = 0; idx < DifficultyVariants.Length; idx++)
+			{
+				WeaponTemplate = X2WeaponTemplate(DifficultyVariants[idx]);
+				if (WeaponTemplate != none)
+				{
+					if (idx < 3)
+						bLegendTemplate = false;
+					else
+						bLegendTemplate = true;
+			
+					class'X2Item_ArcthrowerWeapon'.static.SetMagArcthrowerPricing(WeaponTemplate, bLegendTemplate);
+			}	}
+
+			ItemTemplateManager.FindDataTemplateAllDifficulties('Arcthrower_BM', DifficultyVariants);
+			for (idx = 0; idx < DifficultyVariants.Length; idx++)
+			{
+				WeaponTemplate = X2WeaponTemplate(DifficultyVariants[idx]);
+				if (WeaponTemplate != none)
+				{
+					if (idx < 3)
+						bLegendTemplate = false;
+					else
+						bLegendTemplate = true;
+			
+					class'X2Item_ArcthrowerWeapon'.static.SetBeamArcthrowerPricing(WeaponTemplate, bLegendTemplate);
+			}	}
+
+			// Combat Knife Weapons
+			ItemTemplateManager.FindDataTemplateAllDifficulties('CombatKnife_MG', DifficultyVariants);
+			for (idx = 0; idx < DifficultyVariants.Length; idx++)
+			{
+				WeaponTemplate = X2WeaponTemplate(DifficultyVariants[idx]);
+				if (WeaponTemplate != none)
+				{
+					if (idx < 3)
+						bLegendTemplate = false;
+					else
+						bLegendTemplate = true;
+			
+					class'X2Item_LWCombatKnife'.static.SetMagCombatKnifePricing(WeaponTemplate, bLegendTemplate);
+			}	}
+
+			ItemTemplateManager.FindDataTemplateAllDifficulties('CombatKnife_BM', DifficultyVariants);
+			for (idx = 0; idx < DifficultyVariants.Length; idx++)
+			{
+				WeaponTemplate = X2WeaponTemplate(DifficultyVariants[idx]);
+				if (WeaponTemplate != none)
+				{
+					if (idx < 3)
+						bLegendTemplate = false;
+					else
+						bLegendTemplate = true;
+			
+					class'X2Item_LWCombatKnife'.static.SetBeamCombatKnifePricing(WeaponTemplate, bLegendTemplate);
+			}	}
+
+			// Gauntlet Weapons
+			ItemTemplateManager.FindDataTemplateAllDifficulties('LWGauntlet_MG', DifficultyVariants);
+			for (idx = 0; idx < DifficultyVariants.Length; idx++)
+			{
+				WeaponTemplate = X2WeaponTemplate(DifficultyVariants[idx]);
+				if (WeaponTemplate != none)
+				{
+					if (idx < 3)
+						bLegendTemplate = false;
+					else
+						bLegendTemplate = true;
+			
+					class'X2Item_LWGauntlet'.static.SetMagGauntletPricing(WeaponTemplate, bLegendTemplate);
+			}	}
+
+			ItemTemplateManager.FindDataTemplateAllDifficulties('LWGauntlet_BM', DifficultyVariants);
+			for (idx = 0; idx < DifficultyVariants.Length; idx++)
+			{
+				WeaponTemplate = X2WeaponTemplate(DifficultyVariants[idx]);
+				if (WeaponTemplate != none)
+				{
+					if (idx < 3)
+						bLegendTemplate = false;
+					else
+						bLegendTemplate = true;
+			
+					class'X2Item_LWGauntlet'.static.SetBeamGauntletPricing(WeaponTemplate, bLegendTemplate);
+			}	}
+
+			// Holotargeter Weapons
+			ItemTemplateManager.FindDataTemplateAllDifficulties('Holotargeter_MG', DifficultyVariants);
+			for (idx = 0; idx < DifficultyVariants.Length; idx++)
+			{
+				WeaponTemplate = X2WeaponTemplate(DifficultyVariants[idx]);
+				if (WeaponTemplate != none)
+				{
+					if (idx < 3)
+						bLegendTemplate = false;
+					else
+						bLegendTemplate = true;
+			
+					class'X2Item_LWHolotargeter'.static.SetMagHolotargeterPricing(WeaponTemplate, bLegendTemplate);
+			}	}
+
+			ItemTemplateManager.FindDataTemplateAllDifficulties('Holotargeter_BM', DifficultyVariants);
+			for (idx = 0; idx < DifficultyVariants.Length; idx++)
+			{
+				WeaponTemplate = X2WeaponTemplate(DifficultyVariants[idx]);
+				if (WeaponTemplate != none)
+				{
+					if (idx < 3)
+						bLegendTemplate = false;
+					else
+						bLegendTemplate = true;
+			
+					class'X2Item_LWHolotargeter'.static.SetBeamHolotargeterPricing(WeaponTemplate, bLegendTemplate);
+			}	}
+
+			// Sawed-Off Shotgun Weapons
+			ItemTemplateManager.FindDataTemplateAllDifficulties('SawedOffShotgun_MG', DifficultyVariants);
+			for (idx = 0; idx < DifficultyVariants.Length; idx++)
+			{
+				WeaponTemplate = X2WeaponTemplate(DifficultyVariants[idx]);
+				if (WeaponTemplate != none)
+				{
+					if (idx < 3)
+						bLegendTemplate = false;
+					else
+						bLegendTemplate = true;
+			
+					class'X2Item_LWSawedOffShotgun'.static.SetMagSawedOffShotgunPricing(WeaponTemplate, bLegendTemplate);
+			}	}
+
+			ItemTemplateManager.FindDataTemplateAllDifficulties('SawedOffShotgun_BM', DifficultyVariants);
+			for (idx = 0; idx < DifficultyVariants.Length; idx++)
+			{
+				WeaponTemplate = X2WeaponTemplate(DifficultyVariants[idx]);
+				if (WeaponTemplate != none)
+				{
+					if (idx < 3)
+						bLegendTemplate = false;
+					else
+						bLegendTemplate = true;
+			
+					class'X2Item_LWSawedOffShotgun'.static.SetBeamSawedOffShotgunPricing(WeaponTemplate, bLegendTemplate);
+			}	}
+	}	}
+	else	// For Schematic Upgrades:
+	{
+		// Arcthrower Schematics
+		ItemTemplateManager.FindDataTemplateAllDifficulties('Arcthrower_MG_Schematic', DifficultyVariants);
+		for (idx = 0; idx < DifficultyVariants.Length; idx++)
+		{
+			SchematicTemplate = X2SchematicTemplate(DifficultyVariants[idx]);
+			if (SchematicTemplate != none)
+			{
+				if (idx < 3)
+					bLegendTemplate = false;
+				else
+					bLegendTemplate = true;
+			
+				class'X2Item_ArcthrowerWeapon'.static.SetMagArcthrowerSchematicPricing(SchematicTemplate, bLegendTemplate);
+		}	}
+
+		ItemTemplateManager.FindDataTemplateAllDifficulties('Arcthrower_BM_Schematic', DifficultyVariants);
+		for (idx = 0; idx < DifficultyVariants.Length; idx++)
+		{
+			SchematicTemplate = X2SchematicTemplate(DifficultyVariants[idx]);
+			if (SchematicTemplate != none)
+			{
+				if (idx < 3)
+					bLegendTemplate = false;
+				else
+					bLegendTemplate = true;
+			
+				class'X2Item_ArcthrowerWeapon'.static.SetBeamArcthrowerSchematicPricing(SchematicTemplate, bLegendTemplate);
+		}	}
+
+		// Combat Knife Schematics
+		ItemTemplateManager.FindDataTemplateAllDifficulties('CombatKnife_MG_Schematic', DifficultyVariants);
+		for (idx = 0; idx < DifficultyVariants.Length; idx++)
+		{
+			SchematicTemplate = X2SchematicTemplate(DifficultyVariants[idx]);
+			if (SchematicTemplate != none)
+			{
+				if (idx < 3)
+					bLegendTemplate = false;
+				else
+					bLegendTemplate = true;
+			
+				class'X2Item_LWCombatKnife'.static.SetMagCombatKnifeSchematicPricing(SchematicTemplate, bLegendTemplate);
+		}	}
+
+		ItemTemplateManager.FindDataTemplateAllDifficulties('CombatKnife_BM_Schematic', DifficultyVariants);
+		for (idx = 0; idx < DifficultyVariants.Length; idx++)
+		{
+			SchematicTemplate = X2SchematicTemplate(DifficultyVariants[idx]);
+			if (SchematicTemplate != none)
+			{
+				if (idx < 3)
+					bLegendTemplate = false;
+				else
+					bLegendTemplate = true;
+			
+				class'X2Item_LWCombatKnife'.static.SetBeamCombatKnifeSchematicPricing(SchematicTemplate, bLegendTemplate);
+		}	}
+
+		// Gauntlet Schematics
+		ItemTemplateManager.FindDataTemplateAllDifficulties('LWGauntlet_MG_Schematic', DifficultyVariants);
+		for (idx = 0; idx < DifficultyVariants.Length; idx++)
+		{
+			SchematicTemplate = X2SchematicTemplate(DifficultyVariants[idx]);
+			if (SchematicTemplate != none)
+			{
+				if (idx < 3)
+					bLegendTemplate = false;
+				else
+					bLegendTemplate = true;
+			
+				class'X2Item_LWGauntlet'.static.SetMagGauntletSchematicPricing(SchematicTemplate, bLegendTemplate);
+		}	}
+
+		ItemTemplateManager.FindDataTemplateAllDifficulties('LWGauntlet_BM_Schematic', DifficultyVariants);
+		for (idx = 0; idx < DifficultyVariants.Length; idx++)
+		{
+			SchematicTemplate = X2SchematicTemplate(DifficultyVariants[idx]);
+			if (SchematicTemplate != none)
+			{
+				if (idx < 3)
+					bLegendTemplate = false;
+				else
+					bLegendTemplate = true;
+			
+				class'X2Item_LWGauntlet'.static.SetBeamGauntletSchematicPricing(SchematicTemplate, bLegendTemplate);
+		}	}
+
+		// Holotargeter Schematics
+		ItemTemplateManager.FindDataTemplateAllDifficulties('Holotargeter_MG_Schematic', DifficultyVariants);
+		for (idx = 0; idx < DifficultyVariants.Length; idx++)
+		{
+			SchematicTemplate = X2SchematicTemplate(DifficultyVariants[idx]);
+			if (SchematicTemplate != none)
+			{
+				if (idx < 3)
+					bLegendTemplate = false;
+				else
+					bLegendTemplate = true;
+			
+				class'X2Item_LWHolotargeter'.static.SetMagHolotargeterSchematicPricing(SchematicTemplate, bLegendTemplate);
+		}	}
+
+		ItemTemplateManager.FindDataTemplateAllDifficulties('Holotargeter_BM_Schematic', DifficultyVariants);
+		for (idx = 0; idx < DifficultyVariants.Length; idx++)
+		{
+			SchematicTemplate = X2SchematicTemplate(DifficultyVariants[idx]);
+			if (SchematicTemplate != none)
+			{
+				if (idx < 3)
+					bLegendTemplate = false;
+				else
+					bLegendTemplate = true;
+			
+				class'X2Item_LWHolotargeter'.static.SetBeamHolotargeterSchematicPricing(SchematicTemplate, bLegendTemplate);
+		}	}
+
+		// Sawed-Off Shotgun Schematics
+		ItemTemplateManager.FindDataTemplateAllDifficulties('SawedOffShotgun_MG_Schematic', DifficultyVariants);
+		for (idx = 0; idx < DifficultyVariants.Length; idx++)
+		{
+			SchematicTemplate = X2SchematicTemplate(DifficultyVariants[idx]);
+			if (SchematicTemplate != none)
+			{
+				if (idx < 3)
+					bLegendTemplate = false;
+				else
+					bLegendTemplate = true;
+			
+				class'X2Item_LWSawedOffShotgun'.static.SetMagSawedOffShotgunSchematicPricing(SchematicTemplate, bLegendTemplate);
+		}	}
+
+		ItemTemplateManager.FindDataTemplateAllDifficulties('SawedOffShotgun_BM_Schematic', DifficultyVariants);
+		for (idx = 0; idx < DifficultyVariants.Length; idx++)
+		{
+			SchematicTemplate = X2SchematicTemplate(DifficultyVariants[idx]);
+			if (SchematicTemplate != none)
+			{
+				if (idx < 3)
+					bLegendTemplate = false;
+				else
+					bLegendTemplate = true;
+			
+				class'X2Item_LWSawedOffShotgun'.static.SetBeamSawedOffShotgunSchematicPricing(SchematicTemplate, bLegendTemplate);
+		}	}
+	}
+}
 
 
 // Handle Expanding Ability Tags in Localization text
@@ -232,4 +683,32 @@ static function string DLCAppendSockets(XComUnitPawn Pawn)
 		ReturnString = DefaultString;
 	}
 	return ReturnString;
+}
+
+
+static function bool UseFiniteItems()
+{
+	if (default.bFiniteItems)
+		return true;
+
+	//if (default.bAutoDetectCovertInfiltration && IsModInstalled('X2DownloadableContentInfo_CovertInfiltration'))
+	if (default.bAutoDetectPrototypeArmoury && IsModInstalled('X2DownloadableContentInfo_PrototypeArmoury'))
+		return true;
+
+	return false;
+}
+
+
+static function bool IsModInstalled(name X2DCIName)
+{
+	local X2DownloadableContentInfo Mod;
+
+	foreach `ONLINEEVENTMGR.m_cachedDLCInfos (Mod)
+	{
+		if (Mod.Class.Name == X2DCIName)
+		{
+			return true;
+		}
+	}
+	return false;
 }

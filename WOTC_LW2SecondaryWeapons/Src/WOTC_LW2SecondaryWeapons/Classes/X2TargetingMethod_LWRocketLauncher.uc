@@ -51,7 +51,7 @@ function Update(float DeltaTime)
     local int Direction, CanSeeFromDefault;
     local UnitPeekSide PeekSide;
     local int OutRequiresLean;
-    local TTile BlockedTile, PeekTile, UnitTile, SnapTile;
+    local TTile BlockedTile, PeekTile, UnitTile, TargetTile, SnapTile;
     local bool GoodView;
     local CachedCoverAndPeekData PeekData;
     local array<TTile> Tiles;
@@ -79,13 +79,14 @@ function Update(float DeltaTime)
             if (PeekSide != eNoPeek)
             {
                 UnitTile = World.GetTileCoordinatesFromPosition(FiringUnit.Location);
+				TargetTile = World.GetTileCoordinatesFromPosition(NewTargetLocation);
                 PeekData = World.GetCachedCoverAndPeekData(UnitTile);
                 if (PeekSide == ePeekLeft)
                     PeekTile = PeekData.CoverDirectionInfo[Direction].LeftPeek.PeekTile;
                 else
                     PeekTile = PeekData.CoverDirectionInfo[Direction].RightPeek.PeekTile;
 
-                if (!World.VoxelRaytrace_Tiles(UnitTile, PeekTile, Raytrace))
+                if (!World.VoxelRaytrace_Tiles(TargetTile, PeekTile, Raytrace))
                     GoodView = true;
                 else
                     BlockedTile = Raytrace.BlockedTile;

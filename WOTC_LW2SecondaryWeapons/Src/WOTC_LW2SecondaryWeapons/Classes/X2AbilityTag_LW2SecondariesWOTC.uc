@@ -104,7 +104,8 @@ event ExpandHandler(string InString, out string OutString)
 			}
 			if (TargetUnitState != none)
 			{
-				nName = X2WeaponTemplate(TargetUnitState.GetItemInSlot(eInvSlot_SecondaryWeapon, GameState).GetMyTemplate()).WeaponTech;
+				//nName = X2WeaponTemplate(TargetUnitState.GetItemInSlot(eInvSlot_SecondaryWeapon, GameState).GetMyTemplate()).WeaponTech;
+				nName = X2WeaponTemplate(TargetUnitState.GetItemInSlot(AbilityState.GetSourceWeapon().InventorySlot, GameState).GetMyTemplate()).WeaponTech;
 				switch (nName)
 				{
 					case 'conventional':
@@ -147,6 +148,9 @@ event ExpandHandler(string InString, out string OutString)
 			break;
 		case 'COMBATKNIFE_BM_AIM':
 			OutString = string(class'X2Item_LWCombatKnife'.default.CombatKnife_BEAM_AIM);
+			break;
+		case 'KNIFE_FIGHTER_TILE_RANGE':
+			OutString = string(class'X2Ability_CombatKnifeAbilitySet'.default.KNIFE_FIGHTER_TILE_RANGE);
 			break;
 		case 'COMBATKNIFE_COMBATIVES_DODGE_BONUS':
 			OutString = string(class'X2Ability_CombatKnifeAbilitySet'.default.COMBATIVES_DODGE);
@@ -311,7 +315,8 @@ event ExpandHandler(string InString, out string OutString)
 			}
 			if (TargetUnitState != none)
 			{
-				nName = X2WeaponTemplate(TargetUnitState.GetItemInSlot(eInvSlot_SecondaryWeapon, GameState).GetMyTemplate()).WeaponTech;
+				//nName = X2WeaponTemplate(TargetUnitState.GetItemInSlot(eInvSlot_SecondaryWeapon, GameState).GetMyTemplate()).WeaponTech;
+				nName = X2WeaponTemplate(TargetUnitState.GetItemInSlot(AbilityState.GetSourceWeapon().InventorySlot, GameState).GetMyTemplate()).WeaponTech;
 				switch (nName)
 				{
 					case 'conventional':
@@ -338,7 +343,8 @@ event ExpandHandler(string InString, out string OutString)
 			}
 			if (TargetUnitState != none)
 			{
-				nName = X2WeaponTemplate(TargetUnitState.GetItemInSlot(eInvSlot_SecondaryWeapon, GameState).GetMyTemplate()).WeaponTech;
+				//nName = X2WeaponTemplate(TargetUnitState.GetItemInSlot(eInvSlot_SecondaryWeapon, GameState).GetMyTemplate()).WeaponTech;
+				nName = X2WeaponTemplate(TargetUnitState.GetItemInSlot(AbilityState.GetSourceWeapon().InventorySlot, GameState).GetMyTemplate()).WeaponTech;
 				switch (nName)
 				{
 					case 'conventional':
@@ -365,7 +371,8 @@ event ExpandHandler(string InString, out string OutString)
 			}
 			if (TargetUnitState != none)
 			{
-				nName = X2WeaponTemplate(TargetUnitState.GetItemInSlot(eInvSlot_SecondaryWeapon, GameState).GetMyTemplate()).WeaponTech;
+				//nName = X2WeaponTemplate(TargetUnitState.GetItemInSlot(eInvSlot_SecondaryWeapon, GameState).GetMyTemplate()).WeaponTech;
+				nName = X2WeaponTemplate(TargetUnitState.GetItemInSlot(AbilityState.GetSourceWeapon().InventorySlot, GameState).GetMyTemplate()).WeaponTech;
 				switch (nName)
 				{
 					case 'conventional':
@@ -408,6 +415,9 @@ event ExpandHandler(string InString, out string OutString)
 			break;
 		case 'SAWEDOFFSHOTGUN_PUMP_ACTION_AMMO_BONUS':
 			OutString = string(class'X2Ability_SawedOffShotgunAbilitySet'.default.PUMP_ACTION_EXTRA_AMMO);
+			break;
+		case 'SPARE_SHELLS_RELOADS':
+			OutString = string(class'X2Ability_SawedOffShotgunAbilitySet'.default.SPARE_SHELLS_RELOADS);
 			break;		
 
 

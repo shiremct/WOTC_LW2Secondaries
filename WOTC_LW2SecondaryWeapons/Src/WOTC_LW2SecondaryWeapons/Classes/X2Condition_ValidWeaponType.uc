@@ -20,6 +20,9 @@ event name CallAbilityMeetsCondition(XComGameState_Ability kAbility, XComGameSta
 	InventoryItem = XComGameState_Item(History.GetGameStateForObjectID(kAbility.SourceWeapon.ObjectID));
 	InventorySlot = InventoryItem.InventorySlot;
 
+	if (kAbility.SourceWeapon.ObjectID == 0)
+		return 'AA_Success';
+
 	InventoryItem = SourceUnit.GetItemInSlot(InventorySlot);
 	if (InventoryItem == none)
 		return 'AA_WeaponIncompatible';

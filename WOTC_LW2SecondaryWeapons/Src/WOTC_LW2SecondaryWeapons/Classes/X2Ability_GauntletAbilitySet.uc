@@ -634,8 +634,8 @@ static function X2AbilityTemplate ShockAndAwe()
 
 	// Effect granting a bonus rocket
     RocketChargesEffect = new class 'X2Effect_BonusRocketCharges';
-    RocketChargesEffect.BonusUses=default.SHOCK_AND_AWE_BONUS_CHARGES;
-    RocketChargesEffect.SlotType=eInvSlot_SecondaryWeapon;
+    RocketChargesEffect.BonusUses = default.SHOCK_AND_AWE_BONUS_CHARGES;
+    RocketChargesEffect.SlotType = eInvSlot_SecondaryWeapon;
     RocketChargesEffect.BuildPersistentEffect (1, true, false);
 	Template.AddTargetEffect (RocketChargesEffect);
 

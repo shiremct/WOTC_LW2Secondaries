@@ -2,6 +2,7 @@
 class X2Ability_CombatKnifeAbilitySet extends X2Ability
 	dependson (XComGameStateContext_Ability) config(GameData_SoldierSkills);
 
+var config int KNIFE_FIGHTER_TILE_RANGE;
 var localized string CounterattackDodgeName;
 var config int COUNTERATTACK_DODGE_AMOUNT;
 var config int COMBATIVES_DODGE;
@@ -55,7 +56,9 @@ static function X2AbilityTemplate AddKnifeFighter()
 	StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
 	Template.AbilityToHitCalc = StandardMelee;
 
-    Template.AbilityTargetStyle = default.SimpleSingleMeleeTarget;
+	Template.AbilityTargetStyle = new class'X2AbilityTarget_MovingMelee';
+	Template.TargetingMethod = class'X2TargetingMethod_MeleePath';
+    //Template.AbilityTargetStyle = default.SimpleSingleMeleeTarget;
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
 	// Target Conditions
@@ -63,7 +66,7 @@ static function X2AbilityTemplate AddKnifeFighter()
 	Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
 	AdjacencyCondition = new class'X2Condition_UnitProperty';
 	AdjacencyCondition.RequireWithinRange = true;
-	AdjacencyCondition.WithinRange = 144; //1.5 tiles in Unreal units, allows attacks on the diag
+	AdjacencyCondition.WithinRange = 96 * default.KNIFE_FIGHTER_TILE_RANGE;
 	Template.AbilityTargetConditions.AddItem(AdjacencyCondition);
 
 	// Shooter Conditions
@@ -216,6 +219,7 @@ static function X2AbilityTemplate AddCombativesAttack()
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.MergeVisualizationFn = CounterAttack_MergeVisualization_MrNice;
 
 	Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
 	Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.NormalChosenActivationIncreasePerUse;
@@ -224,6 +228,109 @@ static function X2AbilityTemplate AddCombativesAttack()
 	Template.CinescriptCameraType = "Ranger_Reaper";
 
 	return Template;
+}
+
+static function CounterAttack_MergeVisualization_MrNice(X2Action BuildTree, out X2Action VisualizationTree)
+{
+    local XComGameStateVisualizationMgr         VisMgr;
+    local X2Action_MarkerTreeInsertBegin        MarkerStart;
+    local X2Action_MarkerTreeInsertEnd          MarkerEnd;
+    local X2Action_ApplyWeaponDamageToUnit      ApplyDamage;
+    local XComGameStateContext_Ability          Context;
+    local Array<X2Action>                       FoundActions;
+    local X2Action                              FoundAction;
+    local X2Action                              FireAction;
+    local X2Action                              ExitCoverAction;
+    local X2Action                              EnterCoverAction;
+    local X2Action                              DeathAction;
+    local X2Action_MarkerNamed                  FireReplace;
+    local X2Action_MarkerNamed                  ExitReplace;
+    local X2Action_MarkerNamed                  EnterReplace;   
+    local X2Action                              Action;
+    local VisualizationActionMetadata           Metadata;
+    //local X2Action_MoveTurn                       MoveTurnAction;
+    //local XComGameState_Unit                  CounteredUnit;
+ 
+    VisMgr = `XCOMVISUALIZATIONMGR; 
+ 
+    MarkerStart = X2Action_MarkerTreeInsertBegin(VisMgr.GetNodeOfType(BuildTree, class'X2Action_MarkerTreeInsertBegin'));
+    MarkerEnd = X2Action_MarkerTreeInsertEnd(VisMgr.GetNodeOfType(BuildTree, class'X2Action_MarkerTreeInsertEnd'));
+    Context = XComGameStateContext_Ability(MarkerStart.StateChangeContext);
+ 
+    //  Make the Countering unit always face the Countered unit (this doesn't always happen automatically) -- not sure it actually works
+    //CounteredUnit = XComGameState_Unit(MarkerStart.StateChangeContext.AssociatedState.GetGameStateForObjectID(Context.InputContext.PrimaryTarget.ObjectID));
+    //Metadata = MarkerStart.Metadata;
+    //MoveTurnAction = X2Action_MoveTurn(class'X2Action_MoveTurn'.static.AddToVisualizationTree(Metadata, Context, false, MarkerStart));
+    //MoveTurnAction.m_vFacePoint =  `XWORLD.GetPositionFromTileCoordinates(CounteredUnit.TileLocation);
+    //MoveTurnAction.UpdateAimTarget = true;
+ 
+    //Find the apply weapon damage relevant to this counterattack
+    VisMgr.GetNodesOfType(VisualizationTree, class'X2Action_ApplyWeaponDamageToUnit', FoundActions, , Context.InputContext.SourceObject.ObjectID);
+    if (FoundActions.Length > 0)
+    {   
+        ApplyDamage = X2Action_ApplyWeaponDamageToUnit(FoundActions[0]);
+ 
+        DeathAction = VisMgr.GetNodeOfType(BuildTree, class'X2Action_Death');
+        if (DeathAction != none)
+        {
+            FoundActions.Length = 0;                        
+            if (ApplyDamage.ParentActions[0].HasChildOfType(class'X2Action_EnterCover', FoundActions))
+            {
+                X2Action_EnterCover(FoundActions[0]).bSkipEnterCover = true;
+            }
+        }
+ 
+        FireAction = VisMgr.GetNodeOfType(BuildTree, class'X2Action_Fire');
+        if (FireAction != none)
+        {
+            FireReplace = X2Action_MarkerNamed(class'X2Action'.static.CreateVisualizationActionClass(class'X2Action_MarkerNamed', MarkerStart.StateChangeContext));
+            FireReplace.SetName("FireActionCounterAttackStub");
+            VisMgr.ReplaceNode(FireReplace, FireAction);
+        }
+        
+        ExitCoverAction = VisMgr.GetNodeOfType(BuildTree, class'X2Action_ExitCover');
+        if (ExitCoverAction != none)
+        {
+            ExitReplace = X2Action_MarkerNamed(class'X2Action'.static.CreateVisualizationActionClass(class'X2Action_MarkerNamed', MarkerStart.StateChangeContext));
+            ExitReplace.SetName("ExitActionCounterAttackStub");
+            VisMgr.ReplaceNode(ExitReplace, ExitCoverAction);
+        }
+ 
+        EnterCoverAction = VisMgr.GetNodeOfType(BuildTree, class'X2Action_EnterCover');
+        if (EnterCoverAction != none)
+        {
+            EnterReplace = X2Action_MarkerNamed(class'X2Action'.static.CreateVisualizationActionClass(class'X2Action_MarkerNamed', MarkerStart.StateChangeContext));
+            EnterReplace.SetName("EnterActionCounterAttackStub");
+            VisMgr.ReplaceNode(EnterReplace, EnterCoverAction);
+        }
+ 
+        //EnterCoverAction = VisMgr.GetNodeOfType(VisualizationTree, class'X2Action_EnterCover',, Context.InputContext.PrimaryTarget.ObjectID);
+ 
+        //  Nuke all X2Action_ApplyWeaponDamageToTerrain in both trees. They happen when the attack doesn't reach its target (Counter-attacked aiblity will always cause this)
+        //  While the Counterattack itself will cause this if it misses. These actions cause both participants to flinch, interrupting proper animatitions.
+        VisMgr.GetNodesOfType(VisualizationTree, class'X2Action_ApplyWeaponDamageToTerrain', FoundActions, , Context.InputContext.PrimaryTarget.ObjectID);
+        foreach FoundActions(FoundAction)
+        {
+            EnterReplace = X2Action_MarkerNamed(class'X2Action'.static.CreateVisualizationActionClass(class'X2Action_MarkerNamed', FoundAction.StateChangeContext));
+            EnterReplace.SetName("ApplyDamageTerrainStub");
+            VisMgr.ReplaceNode(EnterReplace, FoundAction);
+        }
+ 
+        VisMgr.GetNodesOfType(BuildTree, class'X2Action_ApplyWeaponDamageToTerrain', FoundActions);
+        foreach FoundActions(FoundAction)
+        {
+            EnterReplace = X2Action_MarkerNamed(class'X2Action'.static.CreateVisualizationActionClass(class'X2Action_MarkerNamed', FoundAction.StateChangeContext));
+            EnterReplace.SetName("ApplyDamageTerrainStub");
+            VisMgr.ReplaceNode(EnterReplace, FoundAction);
+        }
+        
+        VisMgr.InsertSubtree(MarkerStart, MarkerEnd, ApplyDamage);
+        //VisMgr.ConnectAction(EnterCoverAction, VisualizationTree,, MarkerEnd);
+ 
+        Metadata = ApplyDamage.Metadata;
+        Action = class'X2Action_WaitForFinishAnim'.static.AddToVisualizationTree(MetaData, ApplyDamage.StateChangeContext, false, ApplyDamage);
+        VisMgr.ConnectAction(MarkerEnd, VisualizationTree,, Action);
+    }
 }
 
 // Combatives - Preparation: Associated ability that grants the dodge bonus used to gaurantee the first roll for counterattacking during the enemies turn

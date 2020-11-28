@@ -7,10 +7,14 @@
 //---------------------------------------------------------------------------------------
 class X2Item_LWSawedOffShotgun extends X2Item config(GameData_WeaponData);
 
-// ***** UI Image definitions  *****
+// ***** UI Image and item Archetype definitions  *****
 var config string SawedOffShotgun_CV_UIImage;
 var config string SawedOffShotgun_MG_UIImage;
 var config string SawedOffShotgun_BM_UIImage;
+
+var config string SawedOffShotgun_CV_GameArchetype;
+var config string SawedOffShotgun_MG_GameArchetype;
+var config string SawedOffShotgun_BM_GameArchetype;
 
 // ***** Damage arrays for attack actions  *****
 var config WeaponDamageValue SawedOffShotgun_CONVENTIONAL_BASEDAMAGE;
@@ -55,11 +59,22 @@ var config int SawedOffShotgun_MAGNETIC_SCHEMATIC_ALLOYCOST;
 var config int SawedOffShotgun_MAGNETIC_SCHEMATIC_ELERIUMCOST;
 var config int SawedOffShotgun_MAGNETIC_SCHEMATIC_ELERIUMCORECOST;
 
+var config int SawedOffShotgun_MAGNETIC_SCHEMATIC_LEGEND_SUPPLYCOST;
+var config int SawedOffShotgun_MAGNETIC_SCHEMATIC_LEGEND_ALLOYCOST;
+var config int SawedOffShotgun_MAGNETIC_SCHEMATIC_LEGEND_ELERIUMCOST;
+var config int SawedOffShotgun_MAGNETIC_SCHEMATIC_LEGEND_ELERIUMCORECOST;
+
 var config int SawedOffShotgun_MAGNETIC_INDIVIDUAL_SUPPLYCOST;
 var config int SawedOffShotgun_MAGNETIC_INDIVIDUAL_ALLOYCOST;
 var config int SawedOffShotgun_MAGNETIC_INDIVIDUAL_ELERIUMCOST;
 var config int SawedOffShotgun_MAGNETIC_INDIVIDUAL_ELERIUMCORECOST;
 var config int SawedOffShotgun_MAGNETIC_INDIVIDUAL_TRADINGPOSTVALUE;
+
+var config int SawedOffShotgun_MAGNETIC_INDIVIDUAL_LEGEND_SUPPLYCOST;
+var config int SawedOffShotgun_MAGNETIC_INDIVIDUAL_LEGEND_ALLOYCOST;
+var config int SawedOffShotgun_MAGNETIC_INDIVIDUAL_LEGEND_ELERIUMCOST;
+var config int SawedOffShotgun_MAGNETIC_INDIVIDUAL_LEGEND_ELERIUMCORECOST;
+var config int SawedOffShotgun_MAGNETIC_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE;
 
 var config array<name> SawedOffShotgun_MAGNETIC_REQUIRED_TECHS;
 
@@ -68,12 +83,24 @@ var config int SawedOffShotgun_BEAM_SCHEMATIC_ALLOYCOST;
 var config int SawedOffShotgun_BEAM_SCHEMATIC_ELERIUMCOST;
 var config int SawedOffShotgun_BEAM_SCHEMATIC_ELERIUMCORECOST;
 
+var config int SawedOffShotgun_BEAM_SCHEMATIC_LEGEND_SUPPLYCOST;
+var config int SawedOffShotgun_BEAM_SCHEMATIC_LEGEND_ALLOYCOST;
+var config int SawedOffShotgun_BEAM_SCHEMATIC_LEGEND_ELERIUMCOST;
+var config int SawedOffShotgun_BEAM_SCHEMATIC_LEGEND_ELERIUMCORECOST;
+
 var config int SawedOffShotgun_BEAM_INDIVIDUAL_SUPPLYCOST;
 var config int SawedOffShotgun_BEAM_INDIVIDUAL_ALLOYCOST;
 var config int SawedOffShotgun_BEAM_INDIVIDUAL_ELERIUMCOST;
 var config int SawedOffShotgun_BEAM_INDIVIDUAL_ELERIUMCORECOST;
 var config int SawedOffShotgun_BEAM_INDIVIDUAL_ITEMCOST;
 var config int SawedOffShotgun_BEAM_INDIVIDUAL_TRADINGPOSTVALUE;
+
+var config int SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_SUPPLYCOST;
+var config int SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_ALLOYCOST;
+var config int SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_ELERIUMCOST;
+var config int SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_ELERIUMCORECOST;
+var config int SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_ITEMCOST;
+var config int SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE;
 
 var config array<name> SawedOffShotgun_BEAM_REQUIRED_TECHS;
 
@@ -89,7 +116,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(CreateTemplate_SawedOffShotgun_Beam());
 
 	// Create two schematics used to upgrade weapons (If Finite Items is FALSE)
-	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.default.bFiniteItems)
+	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.static.UseFiniteItems())
 	{
 		Templates.AddItem(CreateTemplate_SawedOffShotgun_Magnetic_Schematic());
 		Templates.AddItem(CreateTemplate_SawedOffShotgun_Beam_Schematic());
@@ -134,7 +161,7 @@ static function X2DataTemplate CreateTemplate_SawedOffShotgun_Conventional()
 	}
 	
 	// This contains all the resources; sounds, animations, models, physics, the works.
-	Template.GameArchetype = "LWSawedOffShotgunWOTC.Archetypes.WP_SawedOffShotgun_CV";
+	Template.GameArchetype = default.SawedOffShotgun_CV_GameArchetype;
 
 	Template.iPhysicsImpulse = 5;
 
@@ -142,14 +169,14 @@ static function X2DataTemplate CreateTemplate_SawedOffShotgun_Conventional()
 	Template.bInfiniteItem = true;
 	Template.CanBeBuilt = false;
 
-	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.default.bFiniteItems)
+	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.static.UseFiniteItems())
 	{
 		if (class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.default.bHidePreviousTiers)
 		{
 			Template.HideIfPurchased = 'SawedOffShotgun_MG_Schematic';
 	}	}
 	
-	Template.DamageTypeTemplateName = 'Electrical';
+	Template.DamageTypeTemplateName = 'Projectile_Conventional';
 
 	return Template;
 }
@@ -159,7 +186,6 @@ static function X2DataTemplate CreateTemplate_SawedOffShotgun_Conventional()
 static function X2DataTemplate CreateTemplate_SawedOffShotgun_Magnetic()
 {
 	local X2WeaponTemplate	Template;
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost;
 	local name				TechRequirement;
 	local name				AbilityName;
 
@@ -192,19 +218,18 @@ static function X2DataTemplate CreateTemplate_SawedOffShotgun_Magnetic()
 	}
 		
 	// This contains all the resources; sounds, animations, models, physics, the works.
-	Template.GameArchetype = "LWSawedOffShotgunWOTC.Archetypes.WP_SawedOffShotgun_MG";
+	Template.GameArchetype = default.SawedOffShotgun_MG_GameArchetype;
 
 	Template.iPhysicsImpulse = 5;
+	Template.DamageTypeTemplateName = 'Projectile_MagXCom';
 	
-	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.default.bFiniteItems)
+	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.static.UseFiniteItems())
 	{
 		if (class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.default.bHidePreviousTiers)
 		{
 			Template.HideIfPurchased = 'SawedOffShotgun_BM_Schematic';
-	}	}
+		}
 
-	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.default.bFiniteItems)
-	{
 		Template.CreatorTemplateName = 'SawedOffShotgun_MG_Schematic'; // The schematic which creates this item
 		Template.BaseItem = 'SawedOffShotgun_CV'; // Which item this will be upgraded from
 		Template.CanBeBuilt = false;
@@ -217,6 +242,50 @@ static function X2DataTemplate CreateTemplate_SawedOffShotgun_Magnetic()
 			Template.Requirements.RequiredTechs.AddItem(TechRequirement);
 		}
 		
+		Template.CanBeBuilt = true;
+		Template.bInfiniteItem = false;
+	}
+
+	return Template;
+}
+
+static function SetMagSawedOffShotgunPricing(X2WeaponTemplate Template, bool bLegend)
+{
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+
+	if (bLegend)
+	{
+		if (default.SawedOffShotgun_MAGNETIC_INDIVIDUAL_LEGEND_SUPPLYCOST > 0)
+		{
+			SupplyCost.ItemTemplateName = 'Supplies';
+			SupplyCost.Quantity = default.SawedOffShotgun_MAGNETIC_INDIVIDUAL_LEGEND_SUPPLYCOST;
+			Template.Cost.ResourceCosts.AddItem(SupplyCost);
+		}
+		if (default.SawedOffShotgun_MAGNETIC_INDIVIDUAL_LEGEND_ALLOYCOST > 0)
+		{
+			AlloyCost.ItemTemplateName = 'AlienAlloy';
+			AlloyCost.Quantity = default.SawedOffShotgun_MAGNETIC_INDIVIDUAL_LEGEND_ALLOYCOST;
+			Template.Cost.ResourceCosts.AddItem(AlloyCost);
+		}
+		if (default.SawedOffShotgun_MAGNETIC_INDIVIDUAL_LEGEND_ELERIUMCOST > 0)
+		{
+			EleriumCost.ItemTemplateName = 'EleriumDust';
+			EleriumCost.Quantity = default.SawedOffShotgun_MAGNETIC_INDIVIDUAL_LEGEND_ELERIUMCOST;
+			Template.Cost.ResourceCosts.AddItem(EleriumCost);
+		}
+		if (default.SawedOffShotgun_MAGNETIC_INDIVIDUAL_LEGEND_ELERIUMCORECOST > 0)
+		{
+			CoreCost.ItemTemplateName = 'EleriumCore';
+			CoreCost.Quantity = default.SawedOffShotgun_MAGNETIC_INDIVIDUAL_LEGEND_ELERIUMCORECOST;
+			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+		if (default.SawedOffShotgun_MAGNETIC_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE > 0)
+		{
+			Template.TradingPostValue = default.SawedOffShotgun_MAGNETIC_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE;
+		}
+	}
+	else
+	{
 		if (default.SawedOffShotgun_MAGNETIC_INDIVIDUAL_SUPPLYCOST > 0)
 		{
 			SupplyCost.ItemTemplateName = 'Supplies';
@@ -245,14 +314,7 @@ static function X2DataTemplate CreateTemplate_SawedOffShotgun_Magnetic()
 		{
 			Template.TradingPostValue = default.SawedOffShotgun_MAGNETIC_INDIVIDUAL_TRADINGPOSTVALUE;
 		}
-
-		Template.CanBeBuilt = true;
-		Template.bInfiniteItem = false;
 	}
-
-	Template.DamageTypeTemplateName = 'Electrical';
-
-	return Template;
 }
 
 
@@ -260,7 +322,6 @@ static function X2DataTemplate CreateTemplate_SawedOffShotgun_Magnetic()
 static function X2DataTemplate CreateTemplate_SawedOffShotgun_Beam()
 {
 	local X2WeaponTemplate	Template;
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
 	local name				TechRequirement;
 	local name				AbilityName;
 
@@ -293,11 +354,12 @@ static function X2DataTemplate CreateTemplate_SawedOffShotgun_Beam()
 	}
 		
 	// This contains all the resources; sounds, animations, models, physics, the works.
-	Template.GameArchetype = "LWSawedOffShotgunWOTC.Archetypes.WP_SawedOffShotgun_BM";
+	Template.GameArchetype = default.SawedOffShotgun_BM_GameArchetype;
 
 	Template.iPhysicsImpulse = 5;
+	Template.DamageTypeTemplateName = 'Projectile_BeamXCom';
 
-	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.default.bFiniteItems)
+	if (!class'X2DownloadableContentInfo_WOTC_LW2SecondaryWeapons'.static.UseFiniteItems())
 	{
 		Template.CreatorTemplateName = 'SawedOffShotgun_BM_Schematic'; // The schematic which creates this item
 		Template.BaseItem = 'SawedOffShotgun_MG'; // Which item this will be upgraded from
@@ -311,6 +373,50 @@ static function X2DataTemplate CreateTemplate_SawedOffShotgun_Beam()
 			Template.Requirements.RequiredTechs.AddItem(TechRequirement);
 		}
 
+		Template.CanBeBuilt = true;
+		Template.bInfiniteItem = false;
+	}
+
+	return Template;
+}
+
+static function SetBeamSawedOffShotgunPricing(X2WeaponTemplate Template, bool bLegend)
+{
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+
+	if (bLegend)
+	{
+		if (default.SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_SUPPLYCOST > 0)
+		{
+			SupplyCost.ItemTemplateName = 'Supplies';
+			SupplyCost.Quantity = default.SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_SUPPLYCOST;
+			Template.Cost.ResourceCosts.AddItem(SupplyCost);
+		}
+		if (default.SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_ALLOYCOST > 0)
+		{
+			AlloyCost.ItemTemplateName = 'AlienAlloy';
+			AlloyCost.Quantity = default.SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_ALLOYCOST;
+			Template.Cost.ResourceCosts.AddItem(AlloyCost);
+		}
+		if (default.SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_ELERIUMCOST > 0)
+		{
+			EleriumCost.ItemTemplateName = 'EleriumDust';
+			EleriumCost.Quantity = default.SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_ELERIUMCOST;
+			Template.Cost.ResourceCosts.AddItem(EleriumCost);
+		}
+		if (default.SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_ELERIUMCORECOST > 0)
+		{
+			CoreCost.ItemTemplateName = 'EleriumCore';
+			CoreCost.Quantity = default.SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_ELERIUMCORECOST;
+			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+		if (default.SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE > 0)
+		{
+			Template.TradingPostValue = default.SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE;
+		}
+	}
+	else
+	{
 		if (default.SawedOffShotgun_BEAM_INDIVIDUAL_SUPPLYCOST > 0)
 		{
 			SupplyCost.ItemTemplateName = 'Supplies';
@@ -335,24 +441,11 @@ static function X2DataTemplate CreateTemplate_SawedOffShotgun_Beam()
 			CoreCost.Quantity = default.SawedOffShotgun_BEAM_INDIVIDUAL_ELERIUMCORECOST;
 			Template.Cost.ResourceCosts.AddItem(CoreCost);
 		}
-		if (default.SawedOffShotgun_BEAM_INDIVIDUAL_ITEMCOST > 0)
-		{
-			ItemCost.ItemTemplateName = 'SawedOffShotgun_MG';
-			ItemCost.Quantity = default.SawedOffShotgun_BEAM_INDIVIDUAL_ITEMCOST;
-			Template.Cost.ResourceCosts.AddItem(ItemCost);
-		}
 		if (default.SawedOffShotgun_BEAM_INDIVIDUAL_TRADINGPOSTVALUE > 0)
 		{
 			Template.TradingPostValue = default.SawedOffShotgun_BEAM_INDIVIDUAL_TRADINGPOSTVALUE;
 		}
-
-		Template.CanBeBuilt = true;
-		Template.bInfiniteItem = false;
 	}
-
-	Template.DamageTypeTemplateName = 'Electrical';
-
-	return Template;
 }
 
 
@@ -360,7 +453,6 @@ static function X2DataTemplate CreateTemplate_SawedOffShotgun_Beam()
 static function X2DataTemplate CreateTemplate_SawedOffShotgun_Magnetic_Schematic()
 {
 	local X2SchematicTemplate	Template;
-	local ArtifactCost			SupplyCost, AlloyCost, EleriumCost, CoreCost;
 	local name					TechRequirement;
 
 	`CREATE_X2TEMPLATE(class'X2SchematicTemplate', Template, 'SawedOffShotgun_MG_Schematic');
@@ -376,7 +468,6 @@ static function X2DataTemplate CreateTemplate_SawedOffShotgun_Magnetic_Schematic
 
 	// Reference Item
 	Template.ReferenceItemTemplate = 'SawedOffShotgun_MG';
-	Template.HideIfPurchased = 'SawedOffShotgun_BM';
 
 	// Requirements
 	foreach default.SawedOffShotgun_MAGNETIC_REQUIRED_TECHS(TechRequirement)
@@ -386,33 +477,67 @@ static function X2DataTemplate CreateTemplate_SawedOffShotgun_Magnetic_Schematic
 	Template.Requirements.RequiredEngineeringScore = 10;
 	Template.Requirements.bVisibleIfPersonnelGatesNotMet = true;
 
-	// Cost
-	if (default.SawedOffShotgun_MAGNETIC_SCHEMATIC_SUPPLYCOST > 0)
-	{
-		SupplyCost.ItemTemplateName = 'Supplies';
-		SupplyCost.Quantity = default.SawedOffShotgun_MAGNETIC_SCHEMATIC_SUPPLYCOST;
-		Template.Cost.ResourceCosts.AddItem(SupplyCost);
-	}
-	if (default.SawedOffShotgun_MAGNETIC_SCHEMATIC_ALLOYCOST > 0)
-	{
-		AlloyCost.ItemTemplateName = 'AlienAlloy';
-		AlloyCost.Quantity = default.SawedOffShotgun_MAGNETIC_SCHEMATIC_ALLOYCOST;
-		Template.Cost.ResourceCosts.AddItem(AlloyCost);
-	}
-	if (default.SawedOffShotgun_MAGNETIC_SCHEMATIC_ELERIUMCOST > 0)
-	{
-		EleriumCost.ItemTemplateName = 'EleriumDust';
-		EleriumCost.Quantity = default.SawedOffShotgun_MAGNETIC_SCHEMATIC_ELERIUMCOST;
-		Template.Cost.ResourceCosts.AddItem(EleriumCost);
-	}
-	if (default.SawedOffShotgun_MAGNETIC_SCHEMATIC_ELERIUMCORECOST > 0)
-	{
-		CoreCost.ItemTemplateName = 'EleriumCore';
-		CoreCost.Quantity = default.SawedOffShotgun_MAGNETIC_SCHEMATIC_ELERIUMCORECOST;
-		Template.Cost.ResourceCosts.AddItem(CoreCost);
-	}
-
 	return Template;
+}
+
+static function SetMagSawedOffShotgunSchematicPricing(X2SchematicTemplate Template, bool bLegend)
+{
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+
+	if (bLegend)
+	{
+		if (default.SawedOffShotgun_MAGNETIC_SCHEMATIC_LEGEND_SUPPLYCOST > 0)
+		{
+			SupplyCost.ItemTemplateName = 'Supplies';
+			SupplyCost.Quantity = default.SawedOffShotgun_MAGNETIC_SCHEMATIC_LEGEND_SUPPLYCOST;
+			Template.Cost.ResourceCosts.AddItem(SupplyCost);
+		}
+		if (default.SawedOffShotgun_MAGNETIC_SCHEMATIC_LEGEND_ALLOYCOST > 0)
+		{
+			AlloyCost.ItemTemplateName = 'AlienAlloy';
+			AlloyCost.Quantity = default.SawedOffShotgun_MAGNETIC_SCHEMATIC_LEGEND_ALLOYCOST;
+			Template.Cost.ResourceCosts.AddItem(AlloyCost);
+		}
+		if (default.SawedOffShotgun_MAGNETIC_SCHEMATIC_LEGEND_ELERIUMCOST > 0)
+		{
+			EleriumCost.ItemTemplateName = 'EleriumDust';
+			EleriumCost.Quantity = default.SawedOffShotgun_MAGNETIC_SCHEMATIC_LEGEND_ELERIUMCOST;
+			Template.Cost.ResourceCosts.AddItem(EleriumCost);
+		}
+		if (default.SawedOffShotgun_MAGNETIC_SCHEMATIC_LEGEND_ELERIUMCORECOST > 0)
+		{
+			CoreCost.ItemTemplateName = 'EleriumCore';
+			CoreCost.Quantity = default.SawedOffShotgun_MAGNETIC_SCHEMATIC_LEGEND_ELERIUMCORECOST;
+			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+	}
+	else
+	{
+		if (default.SawedOffShotgun_MAGNETIC_SCHEMATIC_SUPPLYCOST > 0)
+		{
+			SupplyCost.ItemTemplateName = 'Supplies';
+			SupplyCost.Quantity = default.SawedOffShotgun_MAGNETIC_SCHEMATIC_SUPPLYCOST;
+			Template.Cost.ResourceCosts.AddItem(SupplyCost);
+		}
+		if (default.SawedOffShotgun_MAGNETIC_SCHEMATIC_ALLOYCOST > 0)
+		{
+			AlloyCost.ItemTemplateName = 'AlienAlloy';
+			AlloyCost.Quantity = default.SawedOffShotgun_MAGNETIC_SCHEMATIC_ALLOYCOST;
+			Template.Cost.ResourceCosts.AddItem(AlloyCost);
+		}
+		if (default.SawedOffShotgun_MAGNETIC_SCHEMATIC_ELERIUMCOST > 0)
+		{
+			EleriumCost.ItemTemplateName = 'EleriumDust';
+			EleriumCost.Quantity = default.SawedOffShotgun_MAGNETIC_SCHEMATIC_ELERIUMCOST;
+			Template.Cost.ResourceCosts.AddItem(EleriumCost);
+		}
+		if (default.SawedOffShotgun_MAGNETIC_SCHEMATIC_ELERIUMCORECOST > 0)
+		{
+			CoreCost.ItemTemplateName = 'EleriumCore';
+			CoreCost.Quantity = default.SawedOffShotgun_MAGNETIC_SCHEMATIC_ELERIUMCORECOST;
+			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+	}
 }
 
 
@@ -420,7 +545,6 @@ static function X2DataTemplate CreateTemplate_SawedOffShotgun_Magnetic_Schematic
 static function X2DataTemplate CreateTemplate_SawedOffShotgun_Beam_Schematic()
 {
 	local X2SchematicTemplate	Template;
-	local ArtifactCost			SupplyCost, AlloyCost, EleriumCost, CoreCost;
 	local name					TechRequirement;
 
 	`CREATE_X2TEMPLATE(class'X2SchematicTemplate', Template, 'SawedOffShotgun_BM_Schematic');
@@ -446,33 +570,67 @@ static function X2DataTemplate CreateTemplate_SawedOffShotgun_Beam_Schematic()
 	Template.Requirements.RequiredEngineeringScore = 20;
 	Template.Requirements.bVisibleIfPersonnelGatesNotMet = true;
 
-	// Cost
-	if (default.SawedOffShotgun_BEAM_SCHEMATIC_SUPPLYCOST > 0)
-	{
-		SupplyCost.ItemTemplateName = 'Supplies';
-		SupplyCost.Quantity = default.SawedOffShotgun_BEAM_SCHEMATIC_SUPPLYCOST;
-		Template.Cost.ResourceCosts.AddItem(SupplyCost);
-	}
-	if (default.SawedOffShotgun_BEAM_SCHEMATIC_ALLOYCOST > 0)
-	{
-		AlloyCost.ItemTemplateName = 'AlienAlloy';
-		AlloyCost.Quantity = default.SawedOffShotgun_BEAM_SCHEMATIC_ALLOYCOST;
-		Template.Cost.ResourceCosts.AddItem(AlloyCost);
-	}
-	if (default.SawedOffShotgun_BEAM_SCHEMATIC_ELERIUMCOST > 0)
-	{
-		EleriumCost.ItemTemplateName = 'EleriumDust';
-		EleriumCost.Quantity = default.SawedOffShotgun_BEAM_SCHEMATIC_ELERIUMCOST;
-		Template.Cost.ResourceCosts.AddItem(EleriumCost);
-	}
-	if (default.SawedOffShotgun_BEAM_SCHEMATIC_ELERIUMCORECOST > 0)
-	{
-		CoreCost.ItemTemplateName = 'EleriumCore';
-		CoreCost.Quantity = default.SawedOffShotgun_BEAM_SCHEMATIC_ELERIUMCORECOST;
-		Template.Cost.ResourceCosts.AddItem(CoreCost);
-	}
-
 	return Template;
+}
+
+static function SetBeamSawedOffShotgunSchematicPricing(X2SchematicTemplate Template, bool bLegend)
+{
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+
+	if (bLegend)
+	{
+		if (default.SawedOffShotgun_BEAM_SCHEMATIC_LEGEND_SUPPLYCOST > 0)
+		{
+			SupplyCost.ItemTemplateName = 'Supplies';
+			SupplyCost.Quantity = default.SawedOffShotgun_BEAM_SCHEMATIC_LEGEND_SUPPLYCOST;
+			Template.Cost.ResourceCosts.AddItem(SupplyCost);
+		}
+		if (default.SawedOffShotgun_BEAM_SCHEMATIC_LEGEND_ALLOYCOST > 0)
+		{
+			AlloyCost.ItemTemplateName = 'AlienAlloy';
+			AlloyCost.Quantity = default.SawedOffShotgun_BEAM_SCHEMATIC_LEGEND_ALLOYCOST;
+			Template.Cost.ResourceCosts.AddItem(AlloyCost);
+		}
+		if (default.SawedOffShotgun_BEAM_SCHEMATIC_LEGEND_ELERIUMCOST > 0)
+		{
+			EleriumCost.ItemTemplateName = 'EleriumDust';
+			EleriumCost.Quantity = default.SawedOffShotgun_BEAM_SCHEMATIC_LEGEND_ELERIUMCOST;
+			Template.Cost.ResourceCosts.AddItem(EleriumCost);
+		}
+		if (default.SawedOffShotgun_BEAM_SCHEMATIC_LEGEND_ELERIUMCORECOST > 0)
+		{
+			CoreCost.ItemTemplateName = 'EleriumCore';
+			CoreCost.Quantity = default.SawedOffShotgun_BEAM_SCHEMATIC_LEGEND_ELERIUMCORECOST;
+			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+	}
+	else
+	{
+		if (default.SawedOffShotgun_BEAM_SCHEMATIC_SUPPLYCOST > 0)
+		{
+			SupplyCost.ItemTemplateName = 'Supplies';
+			SupplyCost.Quantity = default.SawedOffShotgun_BEAM_SCHEMATIC_SUPPLYCOST;
+			Template.Cost.ResourceCosts.AddItem(SupplyCost);
+		}
+		if (default.SawedOffShotgun_BEAM_SCHEMATIC_ALLOYCOST > 0)
+		{
+			AlloyCost.ItemTemplateName = 'AlienAlloy';
+			AlloyCost.Quantity = default.SawedOffShotgun_BEAM_SCHEMATIC_ALLOYCOST;
+			Template.Cost.ResourceCosts.AddItem(AlloyCost);
+		}
+		if (default.SawedOffShotgun_BEAM_SCHEMATIC_ELERIUMCOST > 0)
+		{
+			EleriumCost.ItemTemplateName = 'EleriumDust';
+			EleriumCost.Quantity = default.SawedOffShotgun_BEAM_SCHEMATIC_ELERIUMCOST;
+			Template.Cost.ResourceCosts.AddItem(EleriumCost);
+		}
+		if (default.SawedOffShotgun_BEAM_SCHEMATIC_ELERIUMCORECOST > 0)
+		{
+			CoreCost.ItemTemplateName = 'EleriumCore';
+			CoreCost.Quantity = default.SawedOffShotgun_BEAM_SCHEMATIC_ELERIUMCORECOST;
+			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+	}
 }
 
 

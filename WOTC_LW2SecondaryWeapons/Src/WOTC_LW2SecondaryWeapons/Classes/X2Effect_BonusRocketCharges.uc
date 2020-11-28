@@ -12,9 +12,11 @@ var EInventorySlot SlotType;
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
 	local XComGameStateHistory		History;
-	local XComGameState_Unit		UnitState; 
+	local XComGameState_Unit		UnitState;
+	local XComGameState_Ability		AbilityState;
 	local XComGameState_Item		ItemState, UpdatedItemState;
 	local X2MultiWeaponTemplate		WeaponTemplate;
+	local EInventorySlot			ExpectedSlotType;
 	local int						Idx, BonusAmmo;
 
 	// Skip initial mission setup effects if initiating a later stage of a multi-part mission
@@ -26,6 +28,13 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	UnitState = XComGameState_Unit(kNewTargetState);
 	if (UnitState == none)
 		return;
+
+	AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
+	ItemState = AbilityState.GetSourceWeapon();
+	if (ItemState != none)
+		ExpectedSlotType = ItemState.InventorySlot;
+	else
+		ExpectedSlotType = SlotType;
 
 	for (Idx = 0; Idx < UnitState.InventoryItems.Length; ++Idx)
 	{
@@ -39,7 +48,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 				BonusAmmo = 0;
 				if (WeaponTemplate != none && WeaponTemplate.bMergeAmmo)
 				{
-					if (ItemState.InventorySlot == SlotType)
+					if (ItemState.InventorySlot == ExpectedSlotType)
 						BonusAmmo += BonusUses;
 				}
 				if(BonusAmmo > 0)

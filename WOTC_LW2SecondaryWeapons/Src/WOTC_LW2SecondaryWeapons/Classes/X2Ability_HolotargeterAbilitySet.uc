@@ -139,7 +139,7 @@ static function X2AbilityTemplate AddHolotarget()
 	DurationEffectCondition.OwnerHasSoldierAbilities.AddItem('IndependentTracking');
 
 	DurationIconEffect = new class'X2Effect_Persistent';
-	DurationIconEffect.BuildPersistentEffect(class'X2Effect_LWHolotarget'.default.INDEPENDENT_TARGETING_NUM_BONUS_TURNS, false, false, false, eGameRule_PlayerTurnBegin);
+	DurationIconEffect.BuildPersistentEffect(class'X2Effect_LWHolotarget'.default.INDEPENDENT_TARGETING_NUM_BONUS_TURNS - 1, false, false, false, eGameRule_PlayerTurnBegin);
 	DurationIconEffect.EffectName = 'DurationEffect';
 	DurationIconEffect.DuplicateResponse = eDupe_Refresh;
 	DurationIconEffect.bRemoveWhenTargetDies = true;

@@ -2,6 +2,7 @@
 class X2Ability_SawedOffShotgunAbilitySet extends X2Ability config(GameData_SoldierSkills);
 
 var config int PUMP_ACTION_EXTRA_AMMO;
+var config int SPARE_SHELLS_RELOADS;
 var config array<name> VALID_WEAPON_CATEGORIES_FOR_SKILLS;
 
 static function array<X2DataTemplate> CreateTemplates()
@@ -11,6 +12,9 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(AddPointBlank());
 	Templates.AddItem(AddBothBarrels());
 	Templates.AddItem(AddPumpAction());
+	Templates.AddItem(AddSpareShells());
+	Templates.AddItem(AddSpareShellsReload());
+	Templates.AddItem(AddSawedOffReload());
 	return Templates;
 }
 
@@ -242,4 +246,184 @@ static function X2AbilityTemplate AddPumpAction()
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
 	return Template;
+}
+
+
+static function X2AbilityTemplate AddSpareShells()
+{
+	local X2AbilityTemplate					Template;
+	local X2Condition_ValidWeaponType		WeaponCondition;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'SpareShells');
+	Template.IconImage = "img:///UILibrary_LWSecondariesWOTC.LW_AbilityPumpAction";
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+	Template.bIsPassive = true;
+
+	WeaponCondition = new class'X2Condition_ValidWeaponType';
+	WeaponCondition.AllowedWeaponCategories = default.VALID_WEAPON_CATEGORIES_FOR_SKILLS;
+	Template.AbilityShooterConditions.AddItem(WeaponCondition);
+
+	Template.AdditionalAbilities.AddItem('SpareShellsReload');
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+	return Template;
+}
+
+static function X2AbilityTemplate AddSpareShellsReload()
+{
+    local X2AbilityTemplate                 Template;
+	local X2AbilityCharges                  Charges;
+    local X2AbilityCost_Charges             ChargeCost;
+    local X2AbilityCost_ActionPoints        ActionPointCost;
+    local X2Condition_UnitProperty          ShooterPropertyCondition;
+    local X2Condition_AbilitySourceWeapon   WeaponCondition;
+    local X2AbilityTrigger_PlayerInput      InputTrigger;
+    local array<name>                       SkipExclusions;
+    
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'SpareShellsReload');
+    
+	Charges = new class'X2AbilityCharges';
+    Charges.InitialCharges = default.SPARE_SHELLS_RELOADS;
+    Template.AbilityCharges = Charges;
+
+    ChargeCost = new class'X2AbilityCost_Charges';
+    ChargeCost.NumCharges = 1;
+    Template.AbilityCosts.AddItem(ChargeCost);
+
+    ActionPointCost = new class'X2AbilityCost_ActionPoints';
+    ActionPointCost.iNumPoints = 1;
+    ActionPointCost.bConsumeAllPoints = false;
+    Template.AbilityCosts.AddItem(ActionPointCost);
+ 
+    ShooterPropertyCondition = new class'X2Condition_UnitProperty'; 
+    ShooterPropertyCondition.ExcludeDead = true;
+    Template.AbilityShooterConditions.AddItem(ShooterPropertyCondition);
+ 
+    WeaponCondition = new class'X2Condition_AbilitySourceWeapon';
+    WeaponCondition.WantsReload = true;
+    Template.AbilityShooterConditions.AddItem(WeaponCondition);
+ 
+    SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
+    Template.AddShooterEffectExclusions(SkipExclusions);
+ 
+    InputTrigger = new class'X2AbilityTrigger_PlayerInput';
+    Template.AbilityTriggers.AddItem(InputTrigger);
+ 
+    Template.AbilityToHitCalc = default.DeadEye;
+    Template.AbilityTargetStyle = default.SelfTarget;
+    
+    Template.AbilitySourceName = 'eAbilitySource_Standard';
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+    Template.IconImage = "img:///UILibrary_LWSecondariesWOTC.UIPerk_ReloadSawedOff";
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.STANDARD_PISTOL_SHOT_PRIORITY + 2;
+ 
+    Template.bDisplayInUITooltip = false;
+    Template.bDisplayInUITacticalText = false;
+    Template.DisplayTargetHitChance = false;
+    Template.bDontDisplayInAbilitySummary = false;
+    
+	Template.CustomFireAnim = 'HL_ReloadSawedOffA';
+	Template.bSkipExitCoverWhenFiring = true;
+    Template.ActivationSpeech = 'Reloading';
+    Template.Hostility = eHostility_Neutral;
+    Template.CinescriptCameraType = "GenericAccentCam";
+    Template.BuildNewGameStateFn = class'X2Ability_DefaultAbilitySet'.static.ReloadAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;  
+    //Template.BuildVisualizationFn = SawedOffReloadAbility_BuildVisualization;  
+ 
+    return Template;    
+}
+
+static function X2AbilityTemplate AddSawedOffReload()
+{
+    local X2AbilityTemplate                 Template;   
+    local X2AbilityCost_ActionPoints        ActionPointCost;
+    local X2Condition_UnitProperty          ShooterPropertyCondition;
+    local X2Condition_AbilitySourceWeapon   WeaponCondition;
+    local X2AbilityTrigger_PlayerInput      InputTrigger;
+    local array<name>                       SkipExclusions;
+    
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'SawedOffReload');
+    
+    ActionPointCost = new class'X2AbilityCost_ActionPoints';
+    ActionPointCost.iNumPoints = 1;
+    ActionPointCost.bConsumeAllPoints = false;
+    Template.AbilityCosts.AddItem(ActionPointCost);
+ 
+    ShooterPropertyCondition = new class'X2Condition_UnitProperty'; 
+    ShooterPropertyCondition.ExcludeDead = true;
+    Template.AbilityShooterConditions.AddItem(ShooterPropertyCondition);
+ 
+    WeaponCondition = new class'X2Condition_AbilitySourceWeapon';
+    WeaponCondition.WantsReload = true;
+    Template.AbilityShooterConditions.AddItem(WeaponCondition);
+ 
+    SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
+    Template.AddShooterEffectExclusions(SkipExclusions);
+ 
+    InputTrigger = new class'X2AbilityTrigger_PlayerInput';
+    Template.AbilityTriggers.AddItem(InputTrigger);
+ 
+    Template.AbilityToHitCalc = default.DeadEye;
+    Template.AbilityTargetStyle = default.SelfTarget;
+    
+    Template.AbilitySourceName = 'eAbilitySource_Standard';
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+	Template.IconImage = "img:///UILibrary_LWSecondariesWOTC.UIPerk_ReloadSawedOff";
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.STANDARD_PISTOL_SHOT_PRIORITY + 2;
+ 
+    Template.bDisplayInUITooltip = false;
+    Template.bDisplayInUITacticalText = false;
+    Template.DisplayTargetHitChance = false;
+    Template.bDontDisplayInAbilitySummary = false;
+    
+    Template.CustomFireAnim = 'HL_ReloadSawedOffA';
+    Template.bSkipExitCoverWhenFiring = false;
+    Template.ActivationSpeech = 'Reloading';
+    Template.Hostility = eHostility_Neutral;
+    Template.CinescriptCameraType = "GenericAccentCam";
+    Template.BuildNewGameStateFn = class'X2Ability_DefaultAbilitySet'.static.ReloadAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;  
+ 
+    return Template;    
+}
+
+simulated function SawedOffReloadAbility_BuildVisualization(XComGameState VisualizeGameState)
+{
+	local XComGameStateHistory History;
+	local XComGameStateContext_Ability  Context;
+	local StateObjectReference          ShootingUnitRef;	
+	local X2Action_PlayAnimation		PlayAnimation;
+
+	local VisualizationActionMetadata        EmptyTrack;
+	local VisualizationActionMetadata        ActionMetadata;
+
+	local XComGameState_Ability Ability;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyover;
+
+	History = `XCOMHISTORY;
+
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+	ShootingUnitRef = Context.InputContext.SourceObject;
+
+	//Configure the visualization track for the shooter
+	//****************************************************************************************
+	ActionMetadata = EmptyTrack;
+	ActionMetadata.StateObject_OldState = History.GetGameStateForObjectID(ShootingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	ActionMetadata.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(ShootingUnitRef.ObjectID);
+	ActionMetadata.VisualizeActor = History.GetVisualizer(ShootingUnitRef.ObjectID);
+					
+	PlayAnimation = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
+	PlayAnimation.Params.AnimName = 'HL_ReloadSawedOffA';
+
+	Ability = XComGameState_Ability(History.GetGameStateForObjectID(Context.InputContext.AbilityRef.ObjectID));
+	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
+	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "", Ability.GetMyTemplate().ActivationSpeech, eColor_Good);
+	//****************************************************************************************
 }

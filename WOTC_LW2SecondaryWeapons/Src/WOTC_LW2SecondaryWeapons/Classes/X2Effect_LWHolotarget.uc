@@ -16,7 +16,26 @@ var config int HDHOLO_BM_CRIT_BONUS;
 var localized string HoloTargetEffectName;
 var localized string HoloTargetEffectPenaltyDescription;
 
-//implements independent targeting
+
+// Implements independent targeting duration bonus
+function int GetStartingNumTurns(const out EffectAppliedData ApplyEffectParameters)
+{
+	local XComGameState_Unit		SourceUnit;
+	local XComGameStateHistory		History;
+	local int						iTurnDuration;
+
+	iTurnDuration = super.GetStartingNumTurns(ApplyEffectParameters);
+
+	History = `XCOMHISTORY;
+	SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+	if (SourceUnit.AppliedEffectNames.Find('Holotargeter_ExtendedDurationEffect') != -1)
+		iTurnDuration += default.INDEPENDENT_TARGETING_NUM_BONUS_TURNS;
+
+	return iTurnDuration;
+}
+
+
+// Sets effect rank for crit and damage bonuses
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
 	local XComGameState_Unit		SourceUnit;
@@ -24,10 +43,15 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 	History = `XCOMHISTORY;
 	SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(NewEffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
-	if (SourceUnit.AppliedEffectNames.Find('Holotargeter_ExtendedDurationEffect') != -1)
-		NewEffectState.iTurnsRemaining += default.INDEPENDENT_TARGETING_NUM_BONUS_TURNS;
+	if (SourceUnit.AppliedEffectNames.Find('Holotargeter_BonusCritChanceEffect') != -1)
+		EffectRank = 1;
+
+	if (SourceUnit.AppliedEffectNames.Find('Holotargeter_BonusDamageEffect') != -1)
+		EffectRank = 2;
+
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }
+
 
 function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
@@ -109,6 +133,7 @@ function bool HasOnlySingleTargetDamage(XComGameState_Ability AbilityState)
  return (bHasSingleTargetDamage && !bHasMultiTargetDamage);
 }
 
+
 //implements VitalPointTargeting
 function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, X2Effect_ApplyWeaponDamage WeaponDamageEffect, optional XComGameState NewGameState)
 {
@@ -159,6 +184,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 	}
 	return DamageMod;
 }
+
 
 DefaultProperties
 {
