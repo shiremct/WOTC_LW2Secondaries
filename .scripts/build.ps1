@@ -18,7 +18,8 @@ switch ($config)
         $builder.EnableDebug()
     }
     "default" {
-        # Nothing special
+        # Cook packages
+		$builder.SetContentOptionsJsonFilename("ContentOptions.json")
     }
     "" { ThrowFailure "Missing build configuration" }
     default { ThrowFailure "Unknown build configuration $config" }
