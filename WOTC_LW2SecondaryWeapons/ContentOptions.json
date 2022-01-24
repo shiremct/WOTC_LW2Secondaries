@@ -1,8 +1,5 @@
 {
     "sfStandalone": [
-		"FX_Heavy_RocketLauncher",
-		"FX_Heavy_Blaster_Launcher",
-		"FX_Explosion_Rocket_Launcher",
 		"LWZ_PerkContent_BlasterLauncher",
 		"LWZ_PerkContent_BunkerBusterProjectile",
 		"LWZ_PerkContent_ConcussionRocket",

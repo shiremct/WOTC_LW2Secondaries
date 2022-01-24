@@ -9,6 +9,7 @@ tags= war of the chosen,item, weapon</Description>
     <SteamPublishID>0</SteamPublishID>
     <AssemblyName>WOTC_LW2SecondaryWeapons</AssemblyName>
     <RootNamespace>WOTC_LW2SecondaryWeapons</RootNamespace>
+    <ProjectGuid>{2d2bbc91-848a-46ca-89bc-8a1204c1bc1a}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Config\XComAI.ini">
@@ -114,6 +115,15 @@ tags= war of the chosen,item, weapon</Description>
       <SubType>Content</SubType>
     </Content>
     <Content Include="ContentOptions.json">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Explosion_Rocket_Launcher.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Heavy_Blaster_Launcher.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\FX_Heavy_RocketLauncher.upk">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Localization\WOTC_LW2SecondaryWeapons.chn">
@@ -329,6 +339,7 @@ tags= war of the chosen,item, weapon</Description>
     <Folder Include="Config" />
     <Folder Include="Localization" />
     <Folder Include="ContentForCook" />
+    <Folder Include="Content" />
     <Folder Include="Src" />
     <Folder Include="Src\LW_Tuple" />
     <Folder Include="Src\LW_Tuple\Classes" />
