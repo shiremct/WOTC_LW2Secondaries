@@ -445,6 +445,12 @@ static function SetBeamArcthrowerPricing(X2WeaponTemplate Template, bool bLegend
 			CoreCost.Quantity = default.Arcthrower_BEAM_INDIVIDUAL_LEGEND_ELERIUMCORECOST;
 			Template.Cost.ResourceCosts.AddItem(CoreCost);
 		}
+		if (default.Arcthrower_BEAM_INDIVIDUAL_LEGEND_ITEMCOST > 0)
+		{
+			ItemCost.ItemTemplateName = 'Arcthrower_MG';
+			ItemCost.Quantity = default.Arcthrower_BEAM_INDIVIDUAL_LEGEND_ITEMCOST;
+			Template.Cost.ResourceCosts.AddItem(ItemCost);
+		}
 		if (default.Arcthrower_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE > 0)
 		{
 			Template.TradingPostValue = default.Arcthrower_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE;
@@ -475,6 +481,12 @@ static function SetBeamArcthrowerPricing(X2WeaponTemplate Template, bool bLegend
 			CoreCost.ItemTemplateName = 'EleriumCore';
 			CoreCost.Quantity = default.Arcthrower_BEAM_INDIVIDUAL_ELERIUMCORECOST;
 			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+		if (default.Arcthrower_BEAM_INDIVIDUAL_ITEMCOST > 0)
+		{
+			ItemCost.ItemTemplateName = 'Arcthrower_MG';
+			ItemCost.Quantity = default.Arcthrower_BEAM_INDIVIDUAL_ITEMCOST;
+			Template.Cost.ResourceCosts.AddItem(ItemCost);
 		}
 		if (default.Arcthrower_BEAM_INDIVIDUAL_TRADINGPOSTVALUE > 0)
 		{

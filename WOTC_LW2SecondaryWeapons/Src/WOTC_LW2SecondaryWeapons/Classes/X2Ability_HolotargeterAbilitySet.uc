@@ -123,7 +123,7 @@ static function X2AbilityTemplate AddHolotarget()
 
 	// Holotarget Effect
 	Effect = new class'X2Effect_LWHoloTarget';
-	Effect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
+	Effect.BuildPersistentEffect(2, false, false, false, eGameRule_PlayerTurnBegin);
 	Effect.SetDisplayInfo(ePerkBuff_Penalty, class'X2Effect_LWHolotarget'.default.HoloTargetEffectName, class'X2Effect_LWHolotarget'.default.HoloTargetEffectPenaltyDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Effect.bRemoveWhenTargetDies = true;
 	Effect.bUseSourcePlayerState = true;
@@ -227,7 +227,7 @@ static function X2AbilityTemplate AddRapidTargeting()
 
 	// Holotarget Effect
 	Effect = new class'X2Effect_LWHoloTarget';
-	Effect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
+	Effect.BuildPersistentEffect(2, false, false, false, eGameRule_PlayerTurnBegin);
 	Effect.SetDisplayInfo(ePerkBuff_Penalty, class'X2Effect_LWHolotarget'.default.HoloTargetEffectName, class'X2Effect_LWHolotarget'.default.HoloTargetEffectPenaltyDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Effect.bRemoveWhenTargetDies = true;
 	Effect.bUseSourcePlayerState = true;
@@ -376,7 +376,7 @@ static function X2AbilityTemplate AddMultiTargeting()
 
 	// Holotarget Effect
 	Effect = new class'X2Effect_LWHoloTarget';
-	Effect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
+	Effect.BuildPersistentEffect(2, false, false, false, eGameRule_PlayerTurnBegin);
 	Effect.SetDisplayInfo(ePerkBuff_Penalty, class'X2Effect_LWHolotarget'.default.HoloTargetEffectName, class'X2Effect_LWHolotarget'.default.HoloTargetEffectPenaltyDescription, Template.IconImage, true,,Template.AbilitySourceName);
 	Effect.bRemoveWhenTargetDies = true;
 	Effect.bUseSourcePlayerState = true;

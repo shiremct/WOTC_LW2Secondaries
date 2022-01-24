@@ -415,6 +415,12 @@ static function SetBeamHolotargeterPricing(X2WeaponTemplate Template, bool bLege
 			CoreCost.Quantity = default.Holotargeter_BEAM_INDIVIDUAL_LEGEND_ELERIUMCORECOST;
 			Template.Cost.ResourceCosts.AddItem(CoreCost);
 		}
+		if (default.Holotargeter_BEAM_INDIVIDUAL_LEGEND_ITEMCOST > 0)
+		{
+			ItemCost.ItemTemplateName = 'Holotargeter_MG';
+			ItemCost.Quantity = default.Holotargeter_BEAM_INDIVIDUAL_LEGEND_ITEMCOST;
+			Template.Cost.ResourceCosts.AddItem(ItemCost);
+		}
 		if (default.Holotargeter_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE > 0)
 		{
 			Template.TradingPostValue = default.Holotargeter_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE;
@@ -445,6 +451,12 @@ static function SetBeamHolotargeterPricing(X2WeaponTemplate Template, bool bLege
 			CoreCost.ItemTemplateName = 'EleriumCore';
 			CoreCost.Quantity = default.Holotargeter_BEAM_INDIVIDUAL_ELERIUMCORECOST;
 			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+		if (default.Holotargeter_BEAM_INDIVIDUAL_ITEMCOST > 0)
+		{
+			ItemCost.ItemTemplateName = 'Holotargeter_MG';
+			ItemCost.Quantity = default.Holotargeter_BEAM_INDIVIDUAL_ITEMCOST;
+			Template.Cost.ResourceCosts.AddItem(ItemCost);
 		}
 		if (default.Holotargeter_BEAM_INDIVIDUAL_TRADINGPOSTVALUE > 0)
 		{
