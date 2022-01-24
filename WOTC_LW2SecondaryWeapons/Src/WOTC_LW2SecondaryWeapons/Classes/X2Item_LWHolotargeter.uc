@@ -253,7 +253,7 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Magnetic()
 
 static function SetMagHolotargeterPricing(X2WeaponTemplate Template, bool bLegend)
 {
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost;
 
 	if (bLegend)
 	{
@@ -499,7 +499,7 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Magnetic_Schematic()
 
 static function SetMagHolotargeterSchematicPricing(X2SchematicTemplate Template, bool bLegend)
 {
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost;
 
 	if (bLegend)
 	{
@@ -592,7 +592,7 @@ static function X2DataTemplate CreateTemplate_Holotargeter_Beam_Schematic()
 
 static function SetBeamHolotargeterSchematicPricing(X2SchematicTemplate Template, bool bLegend)
 {
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost;
 
 	if (bLegend)
 	{

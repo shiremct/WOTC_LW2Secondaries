@@ -267,7 +267,7 @@ static function X2DataTemplate CreateTemplate_CombatKnife_Magnetic()
 
 static function SetMagCombatKnifePricing(X2WeaponTemplate Template, bool bLegend)
 {
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost;
 
 	if (bLegend)
 	{
@@ -513,7 +513,7 @@ static function X2DataTemplate CreateTemplate_CombatKnife_Magnetic_Schematic()
 
 static function SetMagCombatKnifeSchematicPricing(X2SchematicTemplate Template, bool bLegend)
 {
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost;
 
 	if (bLegend)
 	{
@@ -606,7 +606,7 @@ static function X2DataTemplate CreateTemplate_CombatKnife_Beam_Schematic()
 
 static function SetBeamCombatKnifeSchematicPricing(X2SchematicTemplate Template, bool bLegend)
 {
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost;
 
 	if (bLegend)
 	{

@@ -326,7 +326,7 @@ static function X2DataTemplate CreateTemplate_Gauntlet_Magnetic()
 
 static function SetMagGauntletPricing(X2WeaponTemplate Template, bool bLegend)
 {
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost;
 
 	if (bLegend)
 	{
@@ -590,7 +590,7 @@ static function X2DataTemplate CreateTemplate_Gauntlet_Magnetic_Schematic()
 
 static function SetMagGauntletSchematicPricing(X2SchematicTemplate Template, bool bLegend)
 {
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost;
 
 	if (bLegend)
 	{
@@ -683,7 +683,7 @@ static function X2DataTemplate CreateTemplate_Gauntlet_Beam_Schematic()
 
 static function SetBeamGauntletSchematicPricing(X2SchematicTemplate Template, bool bLegend)
 {
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost;
 
 	if (bLegend)
 	{
