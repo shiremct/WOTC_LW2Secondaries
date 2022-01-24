@@ -86,10 +86,15 @@ function Update(float DeltaTime)
                 else
                     PeekTile = PeekData.CoverDirectionInfo[Direction].RightPeek.PeekTile;
 
-                if (!World.VoxelRaytrace_Tiles(TargetTile, PeekTile, Raytrace))
-                    GoodView = true;
-                else
-                    BlockedTile = Raytrace.BlockedTile;
+				// Start Issue #617
+				/// HL-Docs: ref:Bugfixes; issue:617
+				/// Ray trace from the peek tile to the target, not from the unit tile to the peek tile.
+				TargetTile = World.GetTileCoordinatesFromPosition(NewTargetLocation);
+				if (!World.VoxelRaytrace_Tiles(PeekTile, TargetTile, Raytrace))
+					GoodView = true;
+				else
+					BlockedTile = Raytrace.BlockedTile;
+				// End Issue #617
             }               
         }       
         else
