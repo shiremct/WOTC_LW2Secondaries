@@ -2,7 +2,8 @@
 class X2Ability_CombatKnifeAbilitySet extends X2Ability
 	dependson (XComGameStateContext_Ability) config(GameData_SoldierSkills);
 
-var config int KNIFE_FIGHTER_TILE_RANGE;
+var config float KNIFE_FIGHTER_TILE_RANGE;
+var config bool KNIFE_FIGHTER_MOVEMENT_ACTION;
 var localized string CounterattackDodgeName;
 var config int COUNTERATTACK_DODGE_AMOUNT;
 var config int COMBATIVES_DODGE;
@@ -216,6 +217,8 @@ static function X2AbilityTemplate AddCombativesAttack()
 	Template.AbilityTargetStyle = default.SimpleSingleMeleeTarget;
 
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	//Template.CustomFireAnim = 'HL_CounterattackA';
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;

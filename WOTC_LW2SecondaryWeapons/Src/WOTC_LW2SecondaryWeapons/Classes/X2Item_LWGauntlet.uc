@@ -202,6 +202,7 @@ static function X2DataTemplate CreateTemplate_Gauntlet_Conventional()
 	Template.bMergeAmmo = true;
 	Template.bSoundOriginatesFromOwnerLocation = false;
 
+	Template.SetUIStatMarkup(class'XLocalizedData'.default.BurnChanceLabel, , class'X2Ability_GauntletAbilitySet'.default.FLAMETHROWER_DIRECT_APPLY_CHANCE,,, "%");
 	Template.SetUIStatMarkup(default.PrimaryRangeLabel, , default.Gauntlet_Primary_CONVENTIONAL_RANGE);
 	Template.SetUIStatMarkup(default.PrimaryRadiusLabel, , default.Gauntlet_Primary_CONVENTIONAL_RADIUS);
 	Template.SetUIStatMarkup(default.SecondaryRangeLabel, , default.Gauntlet_Secondary_CONVENTIONAL_RANGE);
@@ -279,6 +280,7 @@ static function X2DataTemplate CreateTemplate_Gauntlet_Magnetic()
 	Template.bMergeAmmo = true;
 	Template.bSoundOriginatesFromOwnerLocation = false;
 
+	Template.SetUIStatMarkup(class'XLocalizedData'.default.BurnChanceLabel, , class'X2Ability_GauntletAbilitySet'.default.FLAMETHROWER_DIRECT_APPLY_CHANCE,,, "%");
 	Template.SetUIStatMarkup(default.PrimaryRangeLabel, , default.Gauntlet_Primary_MAGNETIC_RANGE);
 	Template.SetUIStatMarkup(default.PrimaryRadiusLabel, , default.Gauntlet_Primary_MAGNETIC_RADIUS);
 	Template.SetUIStatMarkup(default.SecondaryRangeLabel, , default.Gauntlet_Secondary_MAGNETIC_RANGE);
@@ -435,6 +437,7 @@ static function X2DataTemplate CreateTemplate_Gauntlet_Beam()
 	Template.bMergeAmmo = true;
 	Template.bSoundOriginatesFromOwnerLocation = false;
 
+	Template.SetUIStatMarkup(class'XLocalizedData'.default.BurnChanceLabel, , class'X2Ability_GauntletAbilitySet'.default.FLAMETHROWER_DIRECT_APPLY_CHANCE,,, "%");
 	Template.SetUIStatMarkup(default.PrimaryRangeLabel, , default.Gauntlet_Primary_BEAM_RANGE);
 	Template.SetUIStatMarkup(default.PrimaryRadiusLabel, , default.Gauntlet_Primary_BEAM_RADIUS);
 	Template.SetUIStatMarkup(default.SecondaryRangeLabel, , default.Gauntlet_Secondary_BEAM_RANGE);
@@ -503,6 +506,12 @@ static function SetBeamGauntletPricing(X2WeaponTemplate Template, bool bLegend)
 			CoreCost.Quantity = default.Gauntlet_BEAM_INDIVIDUAL_LEGEND_ELERIUMCORECOST;
 			Template.Cost.ResourceCosts.AddItem(CoreCost);
 		}
+		if (default.Gauntlet_BEAM_INDIVIDUAL_LEGEND_ITEMCOST > 0)
+		{
+			ItemCost.ItemTemplateName = 'LWGauntlet_MG';
+			ItemCost.Quantity = default.Gauntlet_BEAM_INDIVIDUAL_LEGEND_ITEMCOST;
+			Template.Cost.ResourceCosts.AddItem(ItemCost);
+		}
 		if (default.Gauntlet_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE > 0)
 		{
 			Template.TradingPostValue = default.Gauntlet_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE;
@@ -533,6 +542,12 @@ static function SetBeamGauntletPricing(X2WeaponTemplate Template, bool bLegend)
 			CoreCost.ItemTemplateName = 'EleriumCore';
 			CoreCost.Quantity = default.Gauntlet_BEAM_INDIVIDUAL_ELERIUMCORECOST;
 			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+		if (default.Gauntlet_BEAM_INDIVIDUAL_ITEMCOST > 0)
+		{
+			ItemCost.ItemTemplateName = 'LWGauntlet_MG';
+			ItemCost.Quantity = default.Gauntlet_BEAM_INDIVIDUAL_ITEMCOST;
+			Template.Cost.ResourceCosts.AddItem(ItemCost);
 		}
 		if (default.Gauntlet_BEAM_INDIVIDUAL_TRADINGPOSTVALUE > 0)
 		{

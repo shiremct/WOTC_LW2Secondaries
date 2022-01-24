@@ -316,26 +316,26 @@ static function X2AbilityTemplate AddSpareShellsReload()
     Template.AbilityTriggers.AddItem(InputTrigger);
  
     Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = default.SelfTarget;
-    
-    Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.AbilityTargetStyle = default.SelfTarget;
+	
+	Template.AbilitySourceName = 'eAbilitySource_Standard';
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
-    Template.IconImage = "img:///UILibrary_LWSecondariesWOTC.UIPerk_ReloadSawedOff";
+	Template.IconImage = "img:///UILibrary_LWSecondariesWOTC.UIPerk_ReloadSawedOff";
     Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.STANDARD_PISTOL_SHOT_PRIORITY + 2;
- 
-    Template.bDisplayInUITooltip = false;
-    Template.bDisplayInUITacticalText = false;
-    Template.DisplayTargetHitChance = false;
-    Template.bDontDisplayInAbilitySummary = false;
-    
+
+	Template.bDisplayInUITooltip = false;
+	Template.bDisplayInUITacticalText = false;
+	Template.DisplayTargetHitChance = false;
+	Template.bDontDisplayInAbilitySummary = false;
+	
 	Template.CustomFireAnim = 'HL_ReloadSawedOffA';
-	Template.bSkipExitCoverWhenFiring = true;
-    Template.ActivationSpeech = 'Reloading';
-    Template.Hostility = eHostility_Neutral;
-    Template.CinescriptCameraType = "GenericAccentCam";
-    Template.BuildNewGameStateFn = class'X2Ability_DefaultAbilitySet'.static.ReloadAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;  
-    //Template.BuildVisualizationFn = SawedOffReloadAbility_BuildVisualization;  
+	Template.CustomSelfFireAnim = 'HL_ReloadSawedOffA';
+	Template.bSkipExitCoverWhenFiring = false;
+	Template.ActivationSpeech = 'Reloading';
+	Template.Hostility = eHostility_Neutral;
+	Template.CinescriptCameraType = "GenericAccentCam";
+	Template.BuildNewGameStateFn = class'X2Ability_DefaultAbilitySet'.static.ReloadAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
  
     return Template;    
 }
@@ -375,9 +375,9 @@ static function X2AbilityTemplate AddSawedOffReload()
 	Template.AbilityTargetStyle = default.SelfTarget;
 	
 	Template.AbilitySourceName = 'eAbilitySource_Standard';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
-	Template.IconImage = "img:///'UILibrary_RPGO.UIPerk_ReloadSawedOff'";
-	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.RELOAD_PRIORITY;
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+	Template.IconImage = "img:///UILibrary_LWSecondariesWOTC.UIPerk_ReloadSawedOff";
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.STANDARD_PISTOL_SHOT_PRIORITY + 2;
 
 	Template.bDisplayInUITooltip = false;
 	Template.bDisplayInUITacticalText = false;
@@ -394,38 +394,4 @@ static function X2AbilityTemplate AddSawedOffReload()
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	
 
 	return Template;	
-}
-
-simulated function SawedOffReloadAbility_BuildVisualization(XComGameState VisualizeGameState)
-{
-	local XComGameStateHistory History;
-	local XComGameStateContext_Ability  Context;
-	local StateObjectReference          ShootingUnitRef;	
-	local X2Action_PlayAnimation		PlayAnimation;
-
-	local VisualizationActionMetadata        EmptyTrack;
-	local VisualizationActionMetadata        ActionMetadata;
-
-	local XComGameState_Ability Ability;
-	local X2Action_PlaySoundAndFlyOver SoundAndFlyover;
-
-	History = `XCOMHISTORY;
-
-	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
-	ShootingUnitRef = Context.InputContext.SourceObject;
-
-	//Configure the visualization track for the shooter
-	//****************************************************************************************
-	ActionMetadata = EmptyTrack;
-	ActionMetadata.StateObject_OldState = History.GetGameStateForObjectID(ShootingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
-	ActionMetadata.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(ShootingUnitRef.ObjectID);
-	ActionMetadata.VisualizeActor = History.GetVisualizer(ShootingUnitRef.ObjectID);
-					
-	PlayAnimation = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
-	PlayAnimation.Params.AnimName = 'HL_ReloadSawedOffA';
-
-	Ability = XComGameState_Ability(History.GetGameStateForObjectID(Context.InputContext.AbilityRef.ObjectID));
-	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
-	SoundAndFlyOver.SetSoundAndFlyOverParameters(None, "", Ability.GetMyTemplate().ActivationSpeech, eColor_Good);
-	//****************************************************************************************
 }

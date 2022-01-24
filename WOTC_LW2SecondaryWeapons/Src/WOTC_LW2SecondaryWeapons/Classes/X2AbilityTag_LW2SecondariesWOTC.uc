@@ -10,7 +10,16 @@ var config bool bColorConfigValueDescriptions;
 // makes it so we will play well with any other mods that replace X2AbilityTag this way.
 var X2AbilityTag WrappedTag;
 
-var localized string strGenericClassName;
+
+simulated static function TrimTrailingZerosFromFloat(float InputValue, out string text)
+{
+	text = string(InputValue);
+
+	while ((Len(text) > 0) && (InStr(text, "0", true) == Len(text) - 1))
+		text = left(text, Len(text) - 1);
+	while ((Len(text) > 0) && (InStr(text, ".", true) == Len(text) - 1))
+		text = left(text, Len(text) - 1);
+}
 
 
 event ExpandHandler(string InString, out string OutString)
@@ -149,7 +158,7 @@ event ExpandHandler(string InString, out string OutString)
 			OutString = string(class'X2Item_LWCombatKnife'.default.CombatKnife_BEAM_AIM);
 			break;
 		case 'KNIFE_FIGHTER_TILE_RANGE':
-			OutString = string(class'X2Ability_CombatKnifeAbilitySet'.default.KNIFE_FIGHTER_TILE_RANGE);
+			TrimTrailingZerosFromFloat(class'X2Ability_CombatKnifeAbilitySet'.default.KNIFE_FIGHTER_TILE_RANGE, OutString);
 			break;
 		case 'COMBATKNIFE_COMBATIVES_DODGE_BONUS':
 			OutString = string(class'X2Ability_CombatKnifeAbilitySet'.default.COMBATIVES_DODGE);

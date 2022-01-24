@@ -126,6 +126,7 @@ static function X2DataTemplate CreateTemplate_CombatKnife_Conventional()
 {
 	local X2WeaponTemplate Template;
 	local name AbilityName;
+	local WeaponAttachment DefaultAttachment;
 
 	`CREATE_X2TEMPLATE(class'X2WeaponTemplate', Template, 'CombatKnife_CV');
 	Template.EquipSound = "Conventional_Weapon_Equip";
@@ -162,6 +163,20 @@ static function X2DataTemplate CreateTemplate_CombatKnife_Conventional()
 	
 	// This contains all the resources; sounds, animations, models, physics, the works.
 	Template.GameArchetype = default.CombatKnife_CV_GameArchetype;
+
+	// Male Sheath Default Attachment
+	DefaultAttachment.AttachSocket = 'Sheath';
+	DefaultAttachment.AttachMeshName = "LWCombatKnifeWOTC.Meshes.SM_ConvKnife_Sheath";
+	DefaultAttachment.AttachToPawn = true;
+	DefaultAttachment.RequiredGender = eGender_Male;
+	Template.DefaultAttachments.AddItem(DefaultAttachment);
+
+	// Female Sheath Default Attachment
+	DefaultAttachment.AttachSocket = 'Sheath';
+	DefaultAttachment.AttachMeshName = "LWCombatKnifeWOTC.Meshes.SM_ConvKnife_Sheath_F";
+	DefaultAttachment.AttachToPawn = true;
+	DefaultAttachment.RequiredGender = eGender_Female;
+	Template.DefaultAttachments.AddItem(DefaultAttachment);
 
 	Template.StartingItem = true;
 	Template.bInfiniteItem = true;
@@ -414,6 +429,16 @@ static function SetBeamCombatKnifePricing(X2WeaponTemplate Template, bool bLegen
 			CoreCost.Quantity = default.CombatKnife_BEAM_INDIVIDUAL_LEGEND_ELERIUMCORECOST;
 			Template.Cost.ResourceCosts.AddItem(CoreCost);
 		}
+		if (default.CombatKnife_BEAM_INDIVIDUAL_LEGEND_ITEMCOST > 0)
+		{
+			ItemCost.ItemTemplateName = 'CombatKnife_MG';
+			ItemCost.Quantity = default.CombatKnife_BEAM_INDIVIDUAL_LEGEND_ITEMCOST;
+			Template.Cost.ResourceCosts.AddItem(ItemCost);
+		}
+		if (default.CombatKnife_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE > 0)
+		{
+			Template.TradingPostValue = default.CombatKnife_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE;
+		}
 	}
 	else
 	{
@@ -440,6 +465,12 @@ static function SetBeamCombatKnifePricing(X2WeaponTemplate Template, bool bLegen
 			CoreCost.ItemTemplateName = 'EleriumCore';
 			CoreCost.Quantity = default.CombatKnife_BEAM_INDIVIDUAL_ELERIUMCORECOST;
 			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+		if (default.CombatKnife_BEAM_INDIVIDUAL_LEGEND_ITEMCOST > 0)
+		{
+			ItemCost.ItemTemplateName = 'CombatKnife_MG';
+			ItemCost.Quantity = default.CombatKnife_BEAM_INDIVIDUAL_LEGEND_ITEMCOST;
+			Template.Cost.ResourceCosts.AddItem(ItemCost);
 		}
 		if (default.CombatKnife_BEAM_INDIVIDUAL_TRADINGPOSTVALUE > 0)
 		{

@@ -275,6 +275,7 @@ static function X2AbilityTemplate AddEMPulser()
 	StunnedEffect.ApplyChance = 100;
 	StunnedEffect.StunLevel = 2;
 	StunnedEffect.bIsImpairing = true;
+	StunnedEffect.EffectName = class'X2AbilityTemplateManager'.default.StunnedName;
 	//StunnedEffect.EffectName = 'empulserstun';
 	StunnedEffect.EffectHierarchyValue = class'X2StatusEffects'.default.STUNNED_HIERARCHY_VALUE;
 	StunnedEffect.VisualizationFn = class'X2StatusEffects'.static.StunnedVisualization;
@@ -568,7 +569,7 @@ static function X2AbilityTemplate CreateChainLightningAbility()
 	StunnedEffect.ApplyChance = 100;
 	StunnedEffect.StunLevel = 2;
 	StunnedEffect.bIsImpairing = true;
-	StunnedEffect.EffectName = 'empulserstun';
+	//StunnedEffect.EffectName = 'empulserstun';
 	StunnedEffect.EffectHierarchyValue = class'X2StatusEffects'.default.STUNNED_HIERARCHY_VALUE;
 	StunnedEffect.VisualizationFn = class'X2StatusEffects'.static.StunnedVisualization;
 	StunnedEffect.EffectTickedVisualizationFn = class'X2StatusEffects'.static.StunnedVisualizationTicked;

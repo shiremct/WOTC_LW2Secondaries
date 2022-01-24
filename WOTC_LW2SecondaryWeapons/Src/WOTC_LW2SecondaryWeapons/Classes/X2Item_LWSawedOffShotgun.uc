@@ -410,6 +410,12 @@ static function SetBeamSawedOffShotgunPricing(X2WeaponTemplate Template, bool bL
 			CoreCost.Quantity = default.SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_ELERIUMCORECOST;
 			Template.Cost.ResourceCosts.AddItem(CoreCost);
 		}
+		if (default.SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_ITEMCOST > 0)
+		{
+			ItemCost.ItemTemplateName = 'SawedOffShotgun_MG';
+			ItemCost.Quantity = default.SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_ITEMCOST;
+			Template.Cost.ResourceCosts.AddItem(ItemCost);
+		}
 		if (default.SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE > 0)
 		{
 			Template.TradingPostValue = default.SawedOffShotgun_BEAM_INDIVIDUAL_LEGEND_TRADINGPOSTVALUE;
@@ -440,6 +446,12 @@ static function SetBeamSawedOffShotgunPricing(X2WeaponTemplate Template, bool bL
 			CoreCost.ItemTemplateName = 'EleriumCore';
 			CoreCost.Quantity = default.SawedOffShotgun_BEAM_INDIVIDUAL_ELERIUMCORECOST;
 			Template.Cost.ResourceCosts.AddItem(CoreCost);
+		}
+		if (default.SawedOffShotgun_BEAM_INDIVIDUAL_ITEMCOST > 0)
+		{
+			ItemCost.ItemTemplateName = 'SawedOffShotgun_MG';
+			ItemCost.Quantity = default.SawedOffShotgun_BEAM_INDIVIDUAL_ITEMCOST;
+			Template.Cost.ResourceCosts.AddItem(ItemCost);
 		}
 		if (default.SawedOffShotgun_BEAM_INDIVIDUAL_TRADINGPOSTVALUE > 0)
 		{
