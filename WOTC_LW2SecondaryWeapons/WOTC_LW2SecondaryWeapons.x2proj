@@ -18,6 +18,9 @@ tags= war of the chosen,item, weapon</Description>
     <Content Include="Config\XComClassData.ini">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Config\XComContent.ini">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Config\XComEditor.ini">
       <SubType>Content</SubType>
     </Content>
