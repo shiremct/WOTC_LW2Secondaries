@@ -45,36 +45,6 @@ tags= war of the chosen,item, weapon</Description>
     <Content Include="Config\XComUI.ini">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="ContentForCook\FX_CHA_SectopodDrone.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="ContentForCook\FX_Explosion_Rocket_Launcher.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="ContentForCook\FX_Heavy_Blaster_Launcher.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="ContentForCook\FX_Heavy_RocketLauncher.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="ContentForCook\FX_Holograms.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="ContentForCook\FX_Holo_Targeting.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="ContentForCook\FX_Shaders.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="ContentForCook\FX_VH_Shiv.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="ContentForCook\FX_WP_AssaultRifle.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="ContentForCook\FX_WP_TargetPainter.upk">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="ContentForCook\LWAccessories_CG.upk">
       <SubType>Content</SubType>
     </Content>
@@ -111,19 +81,7 @@ tags= war of the chosen,item, weapon</Description>
     <Content Include="ContentForCook\UILibrary_LWSecondariesWOTC.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="ContentForCook\WP_Holo_Targeting.upk">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="ContentOptions.json">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\FX_Explosion_Rocket_Launcher.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\FX_Heavy_Blaster_Launcher.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\FX_Heavy_RocketLauncher.upk">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Localization\WOTC_LW2SecondaryWeapons.chn">
@@ -339,7 +297,6 @@ tags= war of the chosen,item, weapon</Description>
     <Folder Include="Config" />
     <Folder Include="Localization" />
     <Folder Include="ContentForCook" />
-    <Folder Include="Content" />
     <Folder Include="Src" />
     <Folder Include="Src\LW_Tuple" />
     <Folder Include="Src\LW_Tuple\Classes" />
