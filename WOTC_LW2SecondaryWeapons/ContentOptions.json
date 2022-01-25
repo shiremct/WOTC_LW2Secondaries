@@ -1,0 +1,15 @@
+{
+    "sfStandalone": [
+		"LWZ_PerkContent_BlasterLauncher",
+		"LWZ_PerkContent_BunkerBusterProjectile",
+		"LWZ_PerkContent_ConcussionRocket",
+		"LWZ_PerkContent_RocketProjectile",
+		"LWHolotargeterWOTC",
+		"LWArcthrowerWOTC",
+		"LWCombatKnifeWOTC",
+		"LWGauntletWOTC",
+		"LWSoldierSockets",
+		"LWSawedoffShotgunWOTC",
+		"UILibrary_LWSecondariesWOTC"
+    ]
+}

@@ -9,12 +9,16 @@ tags= war of the chosen,item, weapon</Description>
     <SteamPublishID>0</SteamPublishID>
     <AssemblyName>WOTC_LW2SecondaryWeapons</AssemblyName>
     <RootNamespace>WOTC_LW2SecondaryWeapons</RootNamespace>
+    <ProjectGuid>{2d2bbc91-848a-46ca-89bc-8a1204c1bc1a}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Config\XComAI.ini">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Config\XComClassData.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\XComContent.ini">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Config\XComEditor.ini">
@@ -44,70 +48,43 @@ tags= war of the chosen,item, weapon</Description>
     <Content Include="Config\XComUI.ini">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\FX_CHA_SectopodDrone.upk">
+    <Content Include="ContentForCook\LWAccessories_CG.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\FX_Explosion_Rocket_Launcher.upk">
+    <Content Include="ContentForCook\LWArcthrowerWOTC.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\FX_Heavy_Blaster_Launcher.upk">
+    <Content Include="ContentForCook\LWCombatKnifeWOTC.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\FX_Heavy_RocketLauncher.upk">
+    <Content Include="ContentForCook\LWGauntletWOTC.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\FX_Holograms.upk">
+    <Content Include="ContentForCook\LWHolotargeterWOTC.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\FX_Holo_Targeting.upk">
+    <Content Include="ContentForCook\LWSawedoffShotgunWOTC.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\FX_Shaders.upk">
+    <Content Include="ContentForCook\LWSoldierSockets.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\FX_VH_Shiv.upk">
+    <Content Include="ContentForCook\LWZ_PerkContent_BlasterLauncher.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\FX_WP_AssaultRifle.upk">
+    <Content Include="ContentForCook\LWZ_PerkContent_BunkerBusterProjectile.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\FX_WP_TargetPainter.upk">
+    <Content Include="ContentForCook\LWZ_PerkContent_ConcussionRocket.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\LWArcthrowerWOTC.upk">
+    <Content Include="ContentForCook\LWZ_PerkContent_RocketProjectile.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\LWCombatKnifeWOTC.upk">
+    <Content Include="ContentForCook\UILibrary_LWSecondariesWOTC.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\LWGauntletWOTC.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\LWHolotargeterWOTC.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\LWSawedoffShotgunWOTC.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\LWSoldierSockets.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\LWZ_PerkContent_BlasterLauncher.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\LWZ_PerkContent_BunkerBusterProjectile.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\LWZ_PerkContent_ConcussionRocket.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\LWZ_PerkContent_RocketProjectile.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\UILibrary_LWSecondariesWOTC.upk">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\WP_Holo_Targeting.upk">
+    <Content Include="ContentOptions.json">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Localization\WOTC_LW2SecondaryWeapons.chn">
@@ -321,8 +298,8 @@ tags= war of the chosen,item, weapon</Description>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Config" />
-    <Folder Include="Content" />
     <Folder Include="Localization" />
+    <Folder Include="ContentForCook" />
     <Folder Include="Src" />
     <Folder Include="Src\LW_Tuple" />
     <Folder Include="Src\LW_Tuple\Classes" />
@@ -333,5 +310,10 @@ tags= war of the chosen,item, weapon</Description>
     <Folder Include="Src\XModBase_Core_2_0_1\Classes" />
     <Folder Include="Src\XModBase_Interfaces\Classes" />
   </ItemGroup>
-  <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
+  <PropertyGroup>
+    <SolutionRoot>$(MSBuildProjectDirectory)\..\</SolutionRoot>
+    <ScriptsDir>$(SolutionRoot).scripts\</ScriptsDir>
+    <BuildCommonRoot>$(ScriptsDir)X2ModBuildCommon\</BuildCommonRoot>
+  </PropertyGroup>
+  <Import Project="$(BuildCommonRoot)XCOM2.targets" />
 </Project>

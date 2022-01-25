@@ -274,7 +274,7 @@ static function X2DataTemplate CreateTemplate_Arcthrower_Magnetic()
 
 static function SetMagArcthrowerPricing(X2WeaponTemplate Template, bool bLegend)
 {
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost;
 
 	if (bLegend)
 	{
@@ -529,7 +529,7 @@ static function X2DataTemplate CreateTemplate_Arcthrower_Magnetic_Schematic()
 
 static function SetMagArcthrowerSchematicPricing(X2SchematicTemplate Template, bool bLegend)
 {
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost;
 
 	if (bLegend)
 	{
@@ -622,7 +622,7 @@ static function X2DataTemplate CreateTemplate_Arcthrower_Beam_Schematic()
 
 static function SetBeamArcthrowerSchematicPricing(X2SchematicTemplate Template, bool bLegend)
 {
-	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost, ItemCost;
+	local ArtifactCost		SupplyCost, AlloyCost, EleriumCost, CoreCost;
 
 	if (bLegend)
 	{

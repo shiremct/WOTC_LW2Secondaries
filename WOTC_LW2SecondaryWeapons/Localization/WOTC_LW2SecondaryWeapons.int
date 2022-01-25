@@ -49,7 +49,7 @@ AbilityDescName="gauntlet"
 strMaxScatter="\nMax Scatter (Tiles): "
 
 [UIUtilities_LW]
-m_sAverageScatterText="± <XGParam:StrValue0/> Tiles"
+m_sAverageScatterText="Â± <XGParam:StrValue0/> Tiles"
 
 
 ; |=======================|
