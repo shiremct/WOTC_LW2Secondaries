@@ -26,14 +26,14 @@ static function array<X2DataTemplate> CreateTemplates()
 static function X2AbilityTemplate AddArcthrowerStun()
 {
 
-	local X2AbilityCooldown                 Cooldown;
-	local X2AbilityTemplate                 Template;	
+	local X2AbilityCooldown					Cooldown;
+	local X2AbilityTemplate					Template;	
 	local X2Condition_UnitProperty			UnitPropertyCondition;
-	local X2AbilityToHitCalc_StandardAim    ToHitCalc;
-	local X2AbilityCost_ActionPoints        ActionPointCost;
-	local X2Effect_ArcthrowerStunned	    StunnedEffect;
-	local array<name>                       SkipExclusions;
-	local X2Condition_UnitType				ImmuneUnitCondition;
+	local X2AbilityToHitCalc_StandardAim	ToHitCalc;
+	local X2AbilityCost_ActionPoints		ActionPointCost;
+	local X2Effect_ArcthrowerStunned		StunnedEffect;
+	local array<name>						SkipExclusions;
+	local X2Condition_UnitImmunities		UnitImmunityCondition;
 	local X2AbilityTarget_Single			AbilityTargetStyle;
 	local X2Condition_ValidWeaponType		WeaponCondition;
 	local X2Effect_RemoveStunOnTeamChanges	RemoveStunOnTeamChange;
@@ -74,19 +74,11 @@ static function X2AbilityTemplate AddArcthrowerStun()
 	UnitPropertyCondition.RequireWithinRange = true;
 	UnitPropertyCondition.FailOnNonUnits = true;
 	Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
-	// Can't target these specific unit groups
-	ImmuneUnitCondition = new class'X2Condition_UnitType';
-	ImmuneUnitCondition.ExcludeTypes.AddItem('PsiZombie');
-	ImmuneUnitCondition.ExcludeTypes.AddItem('Shadowbind');				// Shadowbound Units
-	ImmuneUnitCondition.ExcludeTypes.AddItem('SpectralZombie');			// Spectral Zombie
-	ImmuneUnitCondition.ExcludeTypes.AddItem('SpectralStunLancer');		// Spectral Units
-	ImmuneUnitCondition.ExcludeTypes.AddItem('AdventPsiWitch');			// Avatars
-	ImmuneUnitCondition.ExcludeTypes.AddItem('ChosenAssassin');			// Chosen Assassin
-	ImmuneUnitCondition.ExcludeTypes.AddItem('ChosenWarlock');			// Chosen Warlock
-	ImmuneUnitCondition.ExcludeTypes.AddItem('ChosenSniper');			// Chosen Sniper
-	ImmuneUnitCondition.ExcludeTypes.AddItem('TheLost');				// All Lost (Stun has no effect on them)
-	ImmuneUnitCondition.ExcludeTypes.AddItem('TheLostBrute');			// All Lost (Stun has no effect on them)
-	Template.AbilityTargetConditions.AddItem(ImmuneUnitCondition);
+	// Can't target immune units
+	UnitImmunityCondition = new class'X2Condition_UnitImmunities';
+	UnitImmunityCondition.AddExcludeDamageType('Mental');
+	UnitImmunityCondition.bOnlyOnCharacterTemplate = true;
+	Template.AbilityTargetConditions.AddItem(UnitImmunityCondition);
 
 	// Can't shoot while dead
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
